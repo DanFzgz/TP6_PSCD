@@ -1,5 +1,5 @@
 # Gu&iacute;a Git
-#### Para un correcto funcionamiento del Proyecto:
+### Para un correcto funcionamiento del Proyecto:
 
 * Cada miembro tendrá su propia rama (Preferiblemente llamada como él)
 * Procedimiento a llevar cada sesión de trabajo individual:
