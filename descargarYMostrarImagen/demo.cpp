@@ -27,13 +27,13 @@ int main() {
     ImageDownloader downloader;
     // Descargamos una imagen de Internet
     //que se almacenará como "IC343.jpg"
-    char URL[500] = "http://assets2.motherboard.tv/content-images/contentimage/no-slug/7703bcea71c8096ea7c18addc28e8a15.jpg";
+    char URL[500] = "https://i11c.3djuegos.com/juegos/3405/_articulos_/fotos/articulos/_articulos_-3908006.jpg";
     char path[100] = "IC343.jpg";
     downloader.downloadImage(URL, path);
 
     // Creamos una valla publicitaria con una imagen
     cimg_library::CImg<unsigned char> img_principal(path);
-    cimg_library::CImgDisplay valla(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), "Valla 1");
+    cimg_library::CImgDisplay valla(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), "Valla");
     valla.resize(VALLA_WIDTH,VALLA_HEIGHT);
     valla.move(0,0); // Esquina superior izquierda
 

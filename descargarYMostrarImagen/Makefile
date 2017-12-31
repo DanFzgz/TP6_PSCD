@@ -9,7 +9,7 @@
 RM = rm -rf
 CPP=g++
 
-# ####### ###### # 
+# ####### ###### #
 #
 MAIN=demo
 target=${MAIN}
@@ -17,8 +17,8 @@ imageDownloader=ImageDownloader
 
 # ######
 #
-CPPFLAGS=-I. -I/usr/local/include -O2 -std=c++11 -fmax-errors=1 -Werror
-LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11 
+CPPFLAGS=-I. -I/usr/local/include -I/opt/X11/include -O2 -std=c++11 
+LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11
 
 .PHONY:all
 
@@ -27,7 +27,7 @@ all: ${target}
 ${MAIN}: ${MAIN}.o ${imageDownloader}.o
 	${CPP} ${imageDownloader}.o ${MAIN}.o -o ${MAIN} ${LDFLAGS}
 
-${MAIN}.o: ${MAIN}.cpp 
+${MAIN}.o: ${MAIN}.cpp
 	${CPP} -c ${CPPFLAGS} ${MAIN}.cpp
 
 ${imageDownloader}.o: ${imageDownloader}.hpp ${imageDownloader}.cpp
