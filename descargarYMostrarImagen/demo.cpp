@@ -27,7 +27,7 @@ int main() {
     ImageDownloader downloader;
     // Descargamos una imagen de Internet
     //que se almacenará como "IC343.jpg"
-    char URL[500] = "https://i11c.3djuegos.com/juegos/3405/_articulos_/fotos/articulos/_articulos_-3908006.jpg";
+    char URL[500] = "https://cdna.artstation.com/p/assets/images/images/008/429/458/large/soufiane-idrassi-singularity-3-0-copy2.jpg?1512695692";
     char path[100] = "IC343.jpg";
     downloader.downloadImage(URL, path);
 
