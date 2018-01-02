@@ -19,9 +19,13 @@
 using namespace std;
 
 const int numVallas = 2;
+const int VALLA_WIDTH = 800;
+const int VALLA_HEIGHT = 800;
 
 class Valla{
 private:
+
+	ImageDownloader downloader;
 
 	mutex mtx;
 	condition_variable libre;
@@ -31,10 +35,20 @@ private:
 
 	string laUrl;
 
+
 	int laValla;
 	int vallasLibres;
 
-	bool valla[numVallas];
+	bool vallas[numVallas];
+
+	/*
+	* Pre:	"url" contiene la URL donde está alojada la imagen a mostrar, "tiempo"
+	*		es el tiempo que se va a mostrar y "valla" es el numero de valla en
+	*		la que se va a mostrar.
+	* Post:	La imagen contenida en la URL "url" ha sido mostrada en la Valla
+	*		numero "valla" durante "tiempo" segundos.
+	*/
+	void mostrar(string url, int valla, int tiempo);
 
 public:
 
@@ -49,16 +63,7 @@ public:
 	* Post:	Se ha mostrado la imagen contenida en la URL "url" en la Valla
 	*		"valla" durante "tiempo" segundos.
 	*/
-	void mostrar(string url, int valla, int tiempo);
-
-	/*
-	* Pre:	Pide que la imagen contenida en la URL "url" sea encolada en el
-	*		gestor para ser mostrada durante "tiempo" segundos.
-	* Post:	La imagen contenida en la URL "url" ha sido encolada en el gestor
-	*		para ser mostrada durante "tiempo" segundos.
-	*/
-	//void peticion(string url, int tiempo);
-
+	void atender(string url, int tiempo);
 
 };
 

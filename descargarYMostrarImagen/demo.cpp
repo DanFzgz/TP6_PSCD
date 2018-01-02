@@ -20,7 +20,7 @@ using namespace cimg_library;
 
 int main() {
     // Tamaños de ventana para las vallas publicitarias
-    const int VALLA_WIDTH = 800;
+    const int VALLA_WIDTH = 450;
     const int VALLA_HEIGHT = 800;
 
     // Creamos el objeto para descargar imágenes
