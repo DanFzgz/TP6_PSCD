@@ -1,0 +1,42 @@
+
+RM = rm -rf
+
+# ####### ###### # 
+#
+
+MAIN=servidorSubasta
+target=${MAIN}
+sockets=Socket
+subasta= subasta
+
+# ######
+#
+
+CPPFLAGS=-I. -O2 -std=c++11
+
+LDFLAGS=-pthread
+SOCKETSFLAGS=-lsocket -lnsl
+
+.PHONY:all
+
+all: ${target}
+
+${MAIN}: ${MAIN}.o ${sockets}.o ${subasta}.o
+	g++ ${LDFLAGS} ${sockets}.o ${subasta}.o ${MAIN}.o -o ${MAIN} ${SOCKETSFLAGS}
+
+${MAIN}.o: ${MAIN}.cpp 
+	g++ -c ${CPPFLAGS} -c ${MAIN}.cpp
+
+${sockets}.o: ${sockets}.hpp ${sockets}.cpp
+	g++ -c ${CPPFLAGS} ${sockets}.cpp
+	
+${subasta}.o: ${subasta}.hpp ${subasta}.cpp
+	g++ -c ${CPPFLAGS} ${subasta}.cpp
+
+clean:
+	$(RM) *.o
+	$(RM) ${target}
+
+echo:
+	echo ${target}
+	echo -n "cppflags: " ${CPPFLAGS}
