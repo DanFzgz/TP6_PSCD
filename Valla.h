@@ -13,6 +13,7 @@
 #include <queue>
 #include <thread>
 #include "ImageDownloader.hpp"
+#include "CImg.h"
 
 #ifndef VALLA_H
 #define VALLA_H
