@@ -47,7 +47,10 @@ void Valla::atender(string url, int tiempo){
 }
 void Valla::mostrar(string url, int numValla, int tiempo){
 
-	string URL = url;
+	char URL[500];
+	for(int x=0; x<url.length();++x){
+		URL[x] = url[x];
+	}
 	char path[100] = " .jpg";
 	char nombreValla[10] = "Valla  ";
 	int x = 0, y = 0;
@@ -56,11 +59,11 @@ void Valla::mostrar(string url, int numValla, int tiempo){
 
 	if(numValla == 1){
 		path[0] = 1 + '0';
-		valla[6] = 1 + '0';
+		vallas[6] = 1 + '0';
 	}
 	else if(numValla == 2) {
 		path[0] = 2 + '0';
-		valla[6] = 2 + '0';
+		vallas[6] = 2 + '0';
 		x = VALLA_WIDTH;
 	}
 
