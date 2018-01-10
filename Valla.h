@@ -32,7 +32,7 @@ private:
 	mutex mtx;
 	condition_variable libre;
 	condition_variable cola_espera;
-	condition_variable cola_espera;
+	condition_variable finaliza;
 
 	queue<string> cola;
 
