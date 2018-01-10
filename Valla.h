@@ -32,6 +32,7 @@ private:
 	mutex mtx;
 	condition_variable libre;
 	condition_variable cola_espera;
+	condition_variable cola_espera;
 
 	queue<string> cola;
 
@@ -66,6 +67,8 @@ public:
 	*		"valla" durante "tiempo" segundos.
 	*/
 	void atender(string url, int tiempo);
+
+	bool fin();
 
 };
 
