@@ -12,20 +12,23 @@
 
 Valla::Valla(){
 	vallasLibres = 2;
-	for(int x = 0; x<numVallas; ++x){ valla[x] = true; }
+	for(int x = 0; x<numVallas; ++x){ vallas[x] = true; }
 }
 
 void Valla::atender(string url, int tiempo){
 
 	unique_lock<mutex> lck(mtx);
 
-	if (vallasLibres == 0 || !cola.empty()){ cola.push(url); }
-
-	laUrl = cola.front();
-	while(laUrl != url){
-		cola_espera.wait(lck);
+	if (vallasLibres == 0 || !cola.empty()){
+		cola.push(url);
 		laUrl = cola.front();
+		while(laUrl != url){
+			cola_espera.wait(lck);
+			laUrl = cola.front();
+		}
 	}
+
+
 
 	while(vallasLibres == 0){
 		libre.wait(lck);
@@ -38,13 +41,15 @@ void Valla::atender(string url, int tiempo){
 			mostrar(url, laValla+1, tiempo);
 		}
 	}
+	cola.pop();
+	cola_espera.notify_all();
 
 }
 void Valla::mostrar(string url, int numValla, int tiempo){
 
-	char URL[500] = url;
-	char path[100] = " .jpg"
-	char nombreValla[10] = "Valla  "
+	string URL = url;
+	char path[100] = " .jpg";
+	char nombreValla[10] = "Valla  ";
 	int x = 0, y = 0;
 
 	// Creamos una valla publicitaria con una imagen
