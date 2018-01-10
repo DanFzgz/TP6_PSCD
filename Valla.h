@@ -12,6 +12,7 @@
 #include <condition_variable>
 #include <queue>
 #include <thread>
+#include "ImageDownloader.hpp"
 
 #ifndef VALLA_H
 #define VALLA_H

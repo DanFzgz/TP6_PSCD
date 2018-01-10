@@ -60,6 +60,12 @@ int main(int argc,char *argv[]) {
 		if(buffer.compare("Acaba subasta")==0){
 			terminar=true;
 		}
+		else if(buffer.compare("URL de la imagen que desea mostrar:")==0){
+			cout << buffer;
+			cin >> mensaje;
+			socket.Send(socket_fd, mensaje);
+
+		}
 		else{
 			cout << buffer <<" : ";
 			cin >> mensaje;
@@ -77,6 +83,7 @@ int main(int argc,char *argv[]) {
 			else if(mensaje.compare("n")==0){
 				cout << "Espero a otra subasta" <<endl;
 			}
+
 		}
 	} while(!terminar);
 
