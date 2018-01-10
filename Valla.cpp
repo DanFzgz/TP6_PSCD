@@ -42,6 +42,7 @@ void Valla::atender(string url, int tiempo){
 		}
 	}
 	cola.pop();
+	finaliza.notify_one();
 	cola_espera.notify_all();
 
 }
@@ -76,4 +77,11 @@ void Valla::mostrar(string url, int numValla, int tiempo){
 
 	// Mostrar imagen durante tiempo segundos
 	valla.wait(tiempo*1000);
+}
+
+bool Valla::fin(){
+
+	while(!cola.empty() && vallasLibres = 2){
+		finaliza.wait();
+	}
 }
