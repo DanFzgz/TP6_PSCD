@@ -18,7 +18,7 @@ using namespace std;
 Subasta s;
 
 //-------------------------------------------------------------
-void administrador() {
+void administrador(Socket&soc,int numSocket) {
 	cout << "Soy el administrador" <<endl;
 	string orden;
 	cin>> orden;
@@ -26,6 +26,7 @@ void administrador() {
 		cin >>orden;
 	}
 	s.finalizarSubastas();
+	soc.close(numSocket);
 }
 
 //-------------------------------------------------------------
@@ -88,6 +89,8 @@ void servCliente(Socket& soc, int client_fd) {
 			}
 		}
 	}
+	buffer="Acaba subasta";
+	soc.Send(client_fd,buffer);
 	soc.Close(client_fd);
 }
 //-------------------------------------------------------------
@@ -124,7 +127,7 @@ int main(int argc,char *argv[]) {
 		exit(1);
 	}
 
-	admin = thread(&administrador);
+	admin = thread(&administrador,ref(socket),socket_fd);
 	subasta= thread(&subastador);
 	int i=0;
 	while(i<max_connections && !s.acabaSubasta()) {
@@ -135,15 +138,16 @@ int main(int argc,char *argv[]) {
 			cerr << "Error en el accept: " << strerror(errno) << endl;
 			// Cerramos el socket
 			socket.Close(socket_fd);
-			exit(1);
+			break;
 		}
 		cout << "nuevoCliente aceptado" <<endl;
 		thread t = thread(&servCliente, ref(socket), client_fd[i]);
 		t.detach();
 		i++;
 	}
-	admin.join();
 	subasta.join();
+	admin.join();
+	cout <<"Me voy a morir"<<endl;
 
     // Cerramos el socket del servidor
     error_code = socket.Close(socket_fd);
