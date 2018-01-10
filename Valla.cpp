@@ -81,7 +81,7 @@ void Valla::mostrar(string url, int numValla, int tiempo){
 
 bool Valla::fin(){
 
-	while(!cola.empty() && vallasLibres = 2){
-		finaliza.wait();
+	while(!cola.empty() && vallasLibres == 2){
+		finaliza.wait(lck);
 	}
 }
