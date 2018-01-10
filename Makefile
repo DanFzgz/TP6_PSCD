@@ -34,7 +34,7 @@ imageDownloader=ImageDownloader
 # #################### #
 CPPFLAGS=-I. -I/usr/local/include -I/opt/X11/include -O2 -std=c++11 -lsockets # Flags compilacion
 LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11 # Flags linkado threads
-##SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS). Descomentar para usar en hendrix
+SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS). Descomentar para usar en hendrix
 
 .PHONY:all
 
