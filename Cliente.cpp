@@ -20,8 +20,8 @@ const int MESSAGE_SIZE = 4001; //mensajes de no más 4000 caracteres
 int main(int argc,char *argv[]) {
 	const string MENS_FIN("END OF SERVICE");
     // Dirección y número donde escucha el proceso servidor
-    string SERVER_ADDRESS = "localhost";
-    int SERVER_PORT = atoi(argv[1]);
+    string SERVER_ADDRESS = argv[1];
+    int SERVER_PORT = atoi(argv[2]);
 
 	// Creación del socket con el que se llevará a cabo
 	// la comunicación con el servidor.
@@ -83,7 +83,7 @@ int main(int argc,char *argv[]) {
 			}
 			if(mensaje.compare("retirar")==0){
 				cout <<"Abandono subasta" <<endl;
-				terminar=true;
+				//terminar=true;
 			}
 			else if(mensaje.compare("n")==0){
 				cout << "Espero a otra subasta" <<endl;

@@ -11,22 +11,19 @@
 #include <thread>
 #include <cstring> //manejo de cadenas tipo C
 #include <cstdlib>
-#include "Subasta.hpp"
-
-const int clientes = 5;
+#include "subasta.hpp"
 
 using namespace std;
 
 Subasta s;
 
 //-------------------------------------------------------------
-void administrador(Socket&soc, int numSocket) {
+void administrador(Socket&soc,int numSocket) {
+	cout << "Soy el administrador" <<endl;
 	string orden;
-	cout << "Soy el administrador" << endl;
-	cin >> orden;
-
-	while(orden != "Finalizar" ){
-		cin >> orden;
+	cin>> orden;
+	while(orden.compare("Finalizar")!=0){
+		cin >>orden;
 	}
 	s.finalizarSubastas();
 	s.llegaMensaje();
@@ -46,54 +43,63 @@ void administrador(Socket&soc, int numSocket) {
 //-------------------------------------------------------------
 
 void subastador(){
-	int ganador, precio;
 	s.iniciarSubasta();
-	cout << "Empieza la subasta" << endl;
+	cout <<"Empieza la subasta" <<endl;
 	while(!s.acabaSubasta()){
 		while(!s.hayGanadores()){
-			cout << "inicio ronda" << endl;
+			cout <<"inicio ronda" <<endl;
 			s.iniciarRonda();
 			s.finalizarRonda();
-			cout << "Acabo ronda" << endl;
+			cout <<"Acabo ronda" <<endl;
 		}
-
-		ganador = s.ganador();
-		precio = s.precio();
+		
+		int ganador=s.ganador();
+		int precio= s.precio();
 		if(ganador>0){
-			cout << "El concursante " << ganador << " ha ganado la subasta con " << precio << endl;
+			cout<< "El concursante" << ganador <<"ha ganado la subasta con " <<precio <<endl;
+			s.esperarMensaje();
+			s.iniciarSubasta();
 		}
 		else{
-			cout << "Subasta finalizada con precio inferior al minimo" << endl;
+			cout <<"Subasta finalizada con precio inferior al minimo" <<endl;
+			s.iniciarSubasta();
 		}
-		s.esperarMensaje();
-		s.iniciarSubasta();
+
 	}
-	cout << "Subastas finalizadas" << endl;
+	cout <<"Subastas finalizadas" <<endl;
 }
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd) {
-	int MAX_BUFFER=250;
+	int MAX_BUFFER=50;
 	s.quieroParticipar();
 	string mensaje;
 	string buffer;
 	string url;
-	bool meVoy = false;
-	while(!s.acabaSubasta() && !meVoy ){
-		while(!s.hayGanadores() && !meVoy){
-			int precio = s.proximoPrecio();
-			mensaje = "Proxima apuesta " + to_string(precio);
-			int send_bytes = soc.Send(client_fd,mensaje);
+	int resul;
+	bool meVoy=false;
+	while(!s.acabaSubasta()&& !meVoy ){
+		while(!s.hayGanadores()&& !meVoy){
+			int precio= s.proximoPrecio();
+			mensaje="Proxima apuesta "+ to_string(precio);
+			int send_bytes= soc.Send(client_fd,mensaje);
 			if(send_bytes == -1) {
 				cerr << "Error al enviar datos: " << strerror(errno) << endl;
 				// Cerramos los sockets
-				soc.Close(client_fd);
-				exit(1);
-			}
-			soc.Recv(client_fd,buffer,MAX_BUFFER);
-			if(buffer.compare("retirar")==0){
 				s.participo(precio,client_fd,2);
-				meVoy = true;
-				//soc.Close(client_fd);
+				meVoy=true;
+				soc.Close(client_fd);
+			}
+			int recv_bytes=soc.Recv(client_fd,buffer,MAX_BUFFER);
+			if(recv_bytes== -1){
+				cerr << "Error al enviar datos: " << strerror(errno) << endl;
+				s.participo(precio,client_fd,2);
+				meVoy=true;
+				soc.Close(client_fd);
+			}
+			if(buffer.size()==0){// reconoce el control c
+				cout <<"Control C pillado" <<endl;
+				s.participo(precio,client_fd,2);
+				meVoy=true;
 			}
 			else if(buffer.compare("n")==0){
 				s.participo(precio,client_fd,1);
@@ -102,36 +108,40 @@ void servCliente(Socket& soc, int client_fd) {
 				s.participo(precio,client_fd,0);
 			}
 		}
-		if(s.ganador()==client_fd){
-			mensaje = "Ha ganado la subasta";
+		if(s.ganador()==client_fd&&!meVoy){
+			mensaje="Ha ganado la subasta";
 			soc.Send(client_fd,mensaje);
-			mensaje = "URL que desearia mostrar: ";
+			mensaje="URL que desearia mostrar: ";
 			soc.Send(client_fd,mensaje);
 			soc.Recv(client_fd,url,MAX_BUFFER);
 			s.mensaje();
-			cout << "URL: " << url << endl;
+			cout <<"URL: " << url <<endl;
 		}
-		else{
-			string mensaje = "Subasta finalizada, esperando a que comienze la siguiente... ";
+		else if(s.ganador()==client_fd&&!meVoy){
+			cout << "El cliente ganador ha abandonado la subasta" <<endl;
+			s.mensaje();
+		}
+		else if(s.ganador()!=client_fd&& !meVoy){
+			string mensaje="Subasta finalizada, esperando a que comienze la siguiente... ";
 			soc.Send(client_fd,mensaje);
 		}
 	}
-	buffer = "Acaba subasta";
-	soc.Send(client_fd,buffer);
-	soc.Close(client_fd);
+	if(!meVoy){
+		buffer="Acaba subasta";
+		soc.Send(client_fd,buffer);
+		soc.Close(client_fd);
+	}
 }
 //-------------------------------------------------------------
 int main(int argc,char *argv[]) {
-
+	const int N = 5;
 	// Dirección y número donde escucha el proceso servidor
 	string SERVER_ADDRESS = "localhost";
     int SERVER_PORT = atoi(argv[1]);
-
-	int client_fd[clientes];
-    thread cliente[clientes];
+    thread cliente[N];
 	thread subasta;
 	thread admin;
-
+    int client_fd[N];
 
 		//srand(time(NULL));
 
@@ -140,14 +150,14 @@ int main(int argc,char *argv[]) {
 	Socket socket(SERVER_PORT);
 
 	// Bind
-	int socket_fd = socket.Bind();
+	int socket_fd =socket.Bind();
 	if (socket_fd == -1) {
 		cerr << "Error en el bind: " << strerror(errno) << endl;
 		exit(1);
 	}
 
 	// Listen
-    int max_connections = clientes;
+    int max_connections = N;
 	int error_code = socket.Listen(max_connections);
 	if(error_code == -1) {
 		cerr << "Error en el listen: " << strerror(errno) << endl;
@@ -155,11 +165,10 @@ int main(int argc,char *argv[]) {
 		socket.Close(socket_fd);
 		exit(1);
 	}
-	
-	admin = thread(&administrador,ref(socket),socket_fd);
-	subasta = thread(&subastador);
 
-	int i = 0;
+	admin = thread(&administrador,ref(socket),socket_fd);
+	subasta= thread(&subastador);
+	int i=0;
 	while(i<max_connections && !s.acabaSubasta()) {
 		// Accept
 		client_fd[i] = socket.Accept();
