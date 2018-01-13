@@ -4,6 +4,8 @@
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -29,7 +31,7 @@ private:
 
 public:
 	Subasta();
-	void participar();
+	void quieroParticipar();
 	void salir();
 	void participo(int cantidad, int numSocket,int codigo);
 	void iniciarSubasta();
