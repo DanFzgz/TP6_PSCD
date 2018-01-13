@@ -69,7 +69,7 @@ void subastador(){
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd) {
 	int MAX_BUFFER=250;
-	s.quieroParticipar();
+	s.participar();
 	string mensaje;
 	string buffer;
 	string url;
