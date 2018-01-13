@@ -20,11 +20,12 @@ using namespace std;
 Subasta s;
 
 //-------------------------------------------------------------
-void administrador(Socket&soc,int numSocket) {
-	cout << "Soy el administrador" << endl;
+void administrador(Socket&soc, int numSocket) {
 	string orden;
+	cout << "Soy el administrador" << endl;
 	cin >> orden;
-	while(orden.compare("Finalizar")!=0){
+
+	while(orden != "Finalizar" ){
 		cin >> orden;
 	}
 	s.finalizarSubastas();
@@ -154,9 +155,10 @@ int main(int argc,char *argv[]) {
 		socket.Close(socket_fd);
 		exit(1);
 	}
-
+	
 	admin = thread(&administrador,ref(socket),socket_fd);
 	subasta = thread(&subastador);
+
 	int i = 0;
 	while(i<max_connections && !s.acabaSubasta()) {
 		// Accept

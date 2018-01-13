@@ -96,13 +96,12 @@ void Subasta::finalizarSubastas(){
 
 	unique_lock<mutex> lck(mtx);
 
-	while(numNos!=numClientes-1||numMensajes==1){
+	while(numNos!=numClientes-1 /*|| numMensajes==1*/){  //Al estar numMensajes definido a 1 en el constructor, impide que lo primero que se haga sea Finalizar
 		subasta.wait(lck);
 	}
 
-	enSubasta=false;
-	terminacion=true;
-	cout << "Me voy a morir" << endl;
+	enSubasta = false;
+	terminacion = true;
 	subasta.notify_all();
 
 }
