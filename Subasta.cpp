@@ -1,24 +1,22 @@
-#include <iostream>
-#include <fstream>
-#include <queue>
+
 #include "Subasta.hpp"
 
 
 Subasta::Subasta(){
 
-	numClientes=0;
-	numNos=-1;
-	numSubastas=0;
-	clienteGanador=-1;
-	cantidad=60;
-	numMensajes=1;
-	enSubasta=false;
-	terminacion=false;
+	numClientes = 0;
+	numNos = -1;
+	numSubastas = 0;
+	clienteGanador = -1;
+	cantidad = 60;
+	numMensajes = 1;
+	enSubasta = false;
+	terminacion = false;
 
 }
 
 
-void Subasta::participar(){
+void Subasta::quieroParticipar(){
 
 	unique_lock<mutex> lck(mtx);
 
@@ -101,7 +99,7 @@ void Subasta::finalizarSubastas(){
 	while(numNos!=numClientes-1||numMensajes==1){
 		subasta.wait(lck);
 	}
-	
+
 	enSubasta=false;
 	terminacion=true;
 	cout << "Me voy a morir" << endl;
@@ -201,6 +199,7 @@ void Subasta::mensaje(){
 	unique_lock<mutex> lck(mtx);
 
 	numMensajes++;
+
 	esperaSubasta.notify_all();
 
 }
