@@ -11,7 +11,7 @@
 #include <thread>
 #include <cstring> //manejo de cadenas tipo C
 #include <cstdlib>
-#include "subasta.hpp"
+#include "Subasta.hpp"
 
 using namespace std;
 
@@ -52,11 +52,11 @@ void subastador(){
 			s.finalizarRonda();
 			cout <<"Acabo ronda" <<endl;
 		}
-		
+
 		int ganador=s.ganador();
 		int precio= s.precio();
 		if(ganador>0){
-			cout<< "El concursante" << ganador <<"ha ganado la subasta con " <<precio <<endl;
+			cout<< "El concursante " << ganador <<" ha ganado la subasta con " <<precio <<endl;
 		}
 		else{
 			cout <<"Subasta finalizada con precio inferior al minimo" <<endl;
@@ -68,7 +68,7 @@ void subastador(){
 }
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd) {
-	int MAX_BUFFER=50;
+	int MAX_BUFFER=250;
 	s.quieroParticipar();
 	string mensaje;
 	string buffer;

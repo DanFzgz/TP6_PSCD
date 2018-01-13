@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <queue>
-#include <subasta.hpp>
+#include "Subasta.hpp"
 
 
 Subasta::Subasta(){

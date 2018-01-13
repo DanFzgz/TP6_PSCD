@@ -11,6 +11,7 @@
 #include <mutex>
 #include <condition_variable>
 #include <queue>
+#include <string>
 #include <thread>
 #include "ImageDownloader.hpp"
 #include "CImg.h"
@@ -68,7 +69,7 @@ public:
 	*/
 	void atender(string url, int tiempo);
 
-	bool fin();
+	void fin();
 
 };
 
