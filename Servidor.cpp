@@ -26,7 +26,18 @@ void administrador(Socket&soc,int numSocket) {
 		cin >>orden;
 	}
 	s.finalizarSubastas();
-	soc.close(numSocket);
+	s.llegaMensaje();
+
+
+    // Cerramos el socket del servidor
+    int error_code = soc.Close(numSocket);
+    if(error_code == -1) {
+		cerr << "Error cerrando el socket del servidor: " << strerror(errno) << endl;
+	}
+
+	// Mensaje de despedida
+	cout << "Bye bye" << endl;
+	exit(0);
 }
 
 //-------------------------------------------------------------
@@ -41,6 +52,7 @@ void subastador(){
 			s.finalizarRonda();
 			cout <<"Acabo ronda" <<endl;
 		}
+		
 		int ganador=s.ganador();
 		int precio= s.precio();
 		if(ganador>0){
@@ -49,6 +61,7 @@ void subastador(){
 		else{
 			cout <<"Subasta finalizada con precio inferior al minimo" <<endl;
 		}
+		s.esperarMensaje();
 		s.iniciarSubasta();
 	}
 	cout <<"Subastas finalizadas" <<endl;
@@ -57,14 +70,14 @@ void subastador(){
 void servCliente(Socket& soc, int client_fd) {
 	int MAX_BUFFER=50;
 	s.quieroParticipar();
-	cout <<" nuevo participante apuntado" <<endl;
+	string mensaje;
 	string buffer;
+	string url;
 	bool meVoy=false;
 	while(!s.acabaSubasta()&& !meVoy ){
 		while(!s.hayGanadores()&& !meVoy){
-			cout<< "voy a preguntar" <<endl;
 			int precio= s.proximoPrecio();
-			string mensaje="Proxima apuesta "+ to_string(precio);
+			mensaje="Proxima apuesta "+ to_string(precio);
 			int send_bytes= soc.Send(client_fd,mensaje);
 			if(send_bytes == -1) {
 				cerr << "Error al enviar datos: " << strerror(errno) << endl;
@@ -75,18 +88,28 @@ void servCliente(Socket& soc, int client_fd) {
 			soc.Recv(client_fd,buffer,MAX_BUFFER);
 			if(buffer.compare("retirar")==0){
 				s.participo(precio,client_fd,2);
-				s.quieroIrme();
 				meVoy=true;
-				soc.Close(client_fd);
+				//soc.Close(client_fd);
 			}
 			else if(buffer.compare("n")==0){
-				cout <<"paso" <<endl;
 				s.participo(precio,client_fd,1);
 			}
 			else{
-				cout <<"modifico y espero" <<endl;
 				s.participo(precio,client_fd,0);
 			}
+		}
+		if(s.ganador()==client_fd){
+			mensaje="Ha ganado la subasta";
+			soc.Send(client_fd,mensaje);
+			mensaje="URL que desearia mostrar: ";
+			soc.Send(client_fd,mensaje);
+			soc.Recv(client_fd,url,MAX_BUFFER);
+			s.mensaje();
+			cout <<"URL: " << url <<endl;
+		}
+		else{
+			string mensaje="Subasta finalizada, esperando a que comienze la siguiente... ";
+			soc.Send(client_fd,mensaje);
 		}
 	}
 	buffer="Acaba subasta";
@@ -135,7 +158,7 @@ int main(int argc,char *argv[]) {
 		client_fd[i] = socket.Accept();
 
 		if(client_fd[i] == -1) {
-			cerr << "Error en el accept: " << strerror(errno) << endl;
+			//cerr << "Error en el accept: " << strerror(errno) << endl;
 			// Cerramos el socket
 			socket.Close(socket_fd);
 			break;
@@ -147,17 +170,6 @@ int main(int argc,char *argv[]) {
 	}
 	subasta.join();
 	admin.join();
-	cout <<"Me voy a morir"<<endl;
-
-    // Cerramos el socket del servidor
-    error_code = socket.Close(socket_fd);
-    if(error_code == -1) {
-		cerr << "Error cerrando el socket del servidor: " << strerror(errno) << endl;
-	}
-
-	// Mensaje de despedida
-	cout << "Bye bye" << endl;
-
-    return error_code;
+    return 0;
 }
 //-------------------------------------------------------------

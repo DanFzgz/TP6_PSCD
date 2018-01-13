@@ -6,10 +6,11 @@
 
 Subasta::Subasta(){
 	numClientes=0;
-	numNos=0;
+	numNos=-1;
 	numSubastas=0;
 	clienteGanador=-1;
 	cantidad=60;
+	numMensajes=1;
 	enSubasta=false;
 	terminacion=false;
 }
@@ -21,6 +22,7 @@ void Subasta::quieroParticipar(){
 		subasta.wait(lck);
 	}
 	numClientes++;
+	cout <<" nuevo participante apuntado" <<endl;
 	esperaSubasta.notify_all();
 }
 
@@ -36,12 +38,20 @@ void Subasta::quieroIrme(){
 void Subasta::participo(int cantidad, int numSocket,int codigo){
 	unique_lock<mutex> lck(mut);
 	if(cantidad> maximoOfrecido&& codigo==0){
+		cout <<"El cliente "<< numSocket <<" ha decidido subir la cantidad a " <<cantidad <<endl;
 		maximoOfrecido=cantidad;
 		clienteGanador=numSocket;
 	}
-	numSubastas++;
+	if(codigo!=2){
+		numSubastas++;
+	}
 	if(codigo==1){
+		cout <<"El cliente "<<numSocket << " ha decidido no pujar esta vez" <<endl;
 		numNos++;
+	}
+	if(codigo==2){
+		cout <<"El cliente ha decidido abandonar la subasta" <<endl;
+		numClientes--;
 	}
 	if(numSubastas== numClientes){
 		enSubasta=false;
@@ -54,11 +64,11 @@ void Subasta::participo(int cantidad, int numSocket,int codigo){
 
 void Subasta::iniciarSubasta(){
 	unique_lock<mutex> lck(mut);
-	while(numClientes<3){
+	while(numClientes<3|| numMensajes!=1){
 		esperaSubasta.wait(lck);
 	}
 	FondoReserva=70;
-	numNos= 0;
+	numNos= -1;
 	enSubasta=false;
 	maximoOfrecido=0;
 	clienteGanador=-1;
@@ -68,11 +78,12 @@ void Subasta::iniciarSubasta(){
 
 void Subasta::finalizarSubastas(){
 	unique_lock<mutex> lck(mut);
-	while(numNos!=numClientes-1){
+	while(numNos!=numClientes-1||numMensajes==1){
 		subasta.wait(lck);
 	}
 	enSubasta=false;
 	terminacion=true;
+	cout <<"Me voy a morir" <<endl;
 	subasta.notify_all();
 }
 
@@ -90,7 +101,7 @@ void Subasta::finalizarRonda(){
 		subasta.wait(lck);
 	}
 	enSubasta=false;
-	if(numNos!=numClientes-1){
+	if(numNos<numClientes-1){
 		cantidad=cantidad+10;
 	}
 	subasta.notify_all();
@@ -98,6 +109,9 @@ void Subasta::finalizarRonda(){
 
 bool Subasta::acabaSubasta(){
 	unique_lock<mutex> lck(mut);
+	while(numMensajes==0){
+		subasta.wait(lck);
+	}
 	return terminacion;
 }
 
@@ -106,6 +120,7 @@ int Subasta::proximoPrecio(){
 	while(!enSubasta){
 		subasta.wait(lck);
 	}
+	cout<< "voy a preguntar" <<endl;
 	return cantidad;
 }
 
@@ -137,4 +152,22 @@ int Subasta::precio(){
 	}
 	return maximoOfrecido;
 }
-	
+
+void Subasta::mensaje(){
+	unique_lock<mutex> lck(mut);
+	numMensajes++;
+	esperaSubasta.notify_all();
+}
+
+void Subasta::esperarMensaje(){
+	unique_lock<mutex> lck(mut);
+	numMensajes=0;
+	subasta.notify_all();
+}
+
+void Subasta::llegaMensaje(){
+	unique_lock<mutex> lck(mut);
+	while(numMensajes==0){
+		subasta.wait(lck);
+	}
+}
