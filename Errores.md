@@ -7,3 +7,4 @@
 * Para que empiece una nueva subasta se necesitan cada vez tres jugadores más (3, 6, 9, 12...) Según he visto, no he llegado a lanzar tantos.
 * No se indica en ningún momento la cantidad mínima para ganar
 * Errores de sincronización Cliente Servidor, no sé detectar el caso concreto.
+* Finalizar sólo funciona si es lo primero que ejecutas
