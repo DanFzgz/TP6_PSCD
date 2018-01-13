@@ -23,25 +23,25 @@ CC = g++ # Comando de compilacion
 #   * ServidorMulticliente #
 # ######################## #
 SOCKET=Socket
-CLIENT=Cliente
+CLIENTE=Cliente
 SERVER=Servidor
 VALLA=Valla
 SUBASTA=Subasta
-imageDownloader=ImageDownloader
+IMDOWNLOADER=ImageDownloader
 
 # #################### #
 # FLAGS DE COMPILACION #
 # #################### #
-CPPFLAGS=-I. -I/usr/local/include -I/opt/X11/include -O2 -std=c++11 -lsockets # Flags compilacion
-LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm -pthread -lcurl -lX11 # Flags linkado threads
-SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS). Descomentar para usar en hendrix
+CPPFLAGS=-I. -I/usr/local/include -I/opt/X11/include -O2 -std=c++11  # -lsockets Flags compilacion
+LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm  -lcurl -lX11 # -pthreadFlags linkado threads
+##SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS). Descomentar para usar en hendrix
 
 .PHONY:all
 
-all: ${CLIENT} ${SERVER}
+all: ${CLIENTE} ${SERVER}
 
-${imageDownloader}.o: ${imageDownloader}.hpp ${imageDownloader}.cpp
-	${CC} -c ${CPPFLAGS} ${imageDownloader}.cpp
+${IMDOWNLOADER}.o: ${IMDOWNLOADER}.hpp ${IMDOWNLOADER}.cpp
+	${CC} -c ${CPPFLAGS} ${IMDOWNLOADER}.cpp
 
 # SOCKETS
 # Compilacion libreria de Sockets
@@ -60,12 +60,12 @@ ${SUBASTA}.o: ${SUBASTA}.hpp ${SUBASTA}.cpp
 #-----------------------------------------------------------
 # CLIENTE
 # Compilacion
-${CLIENT}.o: ${CLIENT}.cpp
-	${CC} -c ${CPPFLAGS} ${CLIENT}.cpp
+${CLIENTE}.o: ${CLIENTE}.cpp
+	${CC} -c ${CPPFLAGS} ${CLIENTE}.cpp
 
 # Linkado
-${CLIENT}: ${SOCKET}.o ${CLIENT}.o
-	${CC} ${LDFLAGS} ${SOCKET}.o ${CLIENT}.o -o ${CLIENT} ${SOCKETSFLAGS}
+${CLIENTE}: ${SOCKET}.o ${CLIENTE}.o
+	${CC} ${LDFLAGS} ${SOCKET}.o ${CLIENTE}.o -o ${CLIENTE} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 # MULTISERVIDOR
 # Compilacion
@@ -73,14 +73,15 @@ ${SERVER}.o: ${SERVER}.cpp
 	${CC} -c ${CPPFLAGS} ${SERVER}.cpp
 
 # Linkado
-${SERVER}: ${SOCKET}.o ${VALLA}.o ${SUBASTA}.o ${imageDownloader}.o ${SERVER}.o
-	${CC} ${LDFLAGS} ${SOCKET}.o ${VALLA}.o ${SUBASTA}.o ${imageDownloader}.o ${SERVER}.o -o ${SERVER} ${SOCKETSFLAGS}
+${SERVER}: ${SOCKET}.o ${VALLA}.o ${SUBASTA}.o ${IMDOWNLOADER}.o ${SERVER}.o
+	${CC} ${LDFLAGS} ${SOCKET}.o ${VALLA}.o ${SUBASTA}.o ${IMDOWNLOADER}.o ${SERVER}.o -o ${SERVER} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 
 # LIMPIEZA
 clean:
 	$(RM) ${SOCKET}.o
-	$(RM) ${CLIENT} ${CLIENT}.o
+	$(RM) ${CLIENTE} ${CLIENTE}.o
 	$(RM) ${SERVER} ${SERVER}.o
 	$(RM) ${VALLA} ${VALLA}.o
 	$(RM) ${SUBASTA} ${SUBASTA}.o
+	$(RM) ${IMDOWNLOADER} ${IMDOWNLOADER}.o

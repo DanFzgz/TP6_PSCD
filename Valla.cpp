@@ -60,11 +60,11 @@ void Valla::mostrar(string url, int numValla, int tiempo){
 
 	if(numValla == 1){
 		path[0] = 1 + '0';
-		vallas[6] = 1 + '0';
+		nombreValla[6] = 1 + '0';
 	}
 	else if(numValla == 2) {
 		path[0] = 2 + '0';
-		vallas[6] = 2 + '0';
+		nombreValla[6] = 2 + '0';
 		x = VALLA_WIDTH;
 	}
 
@@ -79,7 +79,9 @@ void Valla::mostrar(string url, int numValla, int tiempo){
 	valla.wait(tiempo*1000);
 }
 
-bool Valla::fin(){
+void Valla::fin(){
+
+	unique_lock<mutex> lck(mtx);
 
 	while(!cola.empty() && vallasLibres == 2){
 		finaliza.wait(lck);
