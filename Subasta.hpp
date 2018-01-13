@@ -22,6 +22,7 @@ private:
 	condition_variable esperaSubasta; // El subastador espera a que haya como minimo 3 participantes para comenzar la subasta.
 	bool enSubasta; //Indica si hay una ronda en proceso.
 	bool terminacion; //Indica si el administrados quiere finalizar el programa.
+	int numMensajes;
 public:
 	Subasta();
 	void quieroParticipar();
@@ -36,6 +37,9 @@ public:
 	bool hayGanadores();
 	int ganador();
 	int precio();
+	void mensaje();
+	void esperarMensaje();
+	void llegaMensaje();
 };
 	
 #endif
