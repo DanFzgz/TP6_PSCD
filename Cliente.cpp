@@ -20,11 +20,11 @@ const int MESSAGE_SIZE = 4001; //mensajes de no más 4000 caracteres
 int main(int argc,char *argv[]) {
 	const string MENS_FIN("END OF SERVICE");
     // Dirección y número donde escucha el proceso servidor
-    string SERVER_ADDRESS = argv[0];
-    int SERVER_PORT = atoi(argv[1]);
+    string SERVER_ADDRESS = argv[1];
+    int SERVER_PORT = atoi(argv[2]);
 	string url;
-	if(argc==3){
-		url=argv[2];
+	if(argc==4){
+		url=argv[3];
 	}
 
 	// Creación del socket con el que se llevará a cabo
