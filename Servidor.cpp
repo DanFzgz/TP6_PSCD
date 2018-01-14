@@ -34,6 +34,7 @@ void administrador(Socket&soc,int numSocket) {
 		cin >>orden;
 	}
 	s.finalizarSubastas();
+	v.terminar();
 	s.llegaMensaje();
 
 
@@ -129,6 +130,7 @@ void servCliente(Socket& soc, int client_fd) {
 			soc.Send(client_fd,mensaje);
 			soc.Recv(client_fd,url,MAX_BUFFER);
 			cola_url.push(url);
+			v.avisar();
 			v.sumarPeticion();
 			//cola.notify_all();
 			s.mensaje();
@@ -151,10 +153,7 @@ void servCliente(Socket& soc, int client_fd) {
 }
 
 void atender(){
-	string url;
-	while(!v.ended()){
-		v.mostrar(cola_url);
-	}
+	v.mostrar(cola_url);
 }
 //-------------------------------------------------------------
 int main(int argc,char *argv[]) {

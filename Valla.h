@@ -34,7 +34,6 @@ private:
 	mutex mtx;
 	condition_variable cv;
 
-	int laValla;
 	int vallasLibres;
 	int tiempo;
 
@@ -57,29 +56,10 @@ public:
 
 	void mostrar(queue<string>& cola);
 
-    void fin();
-
     void terminar();
 
-    bool ended();
+    void avisar();
 
-    bool libre1();
-
-    bool libre2();
-
-	/*
-	* Pre: --
-	*
-	* Post: Se incrementa en 1 el numero de imagenes mostradas
-	*/
-	void sumarImagenes();
-
-	/*
-	* Pre: "t" es un tiempo en segundos
-	*
-	* Post: Se incrementa en t el tiempo total que las imagenes han estado en pantalla
-	*/
-	void sumarTiempo(double t);
 
 	/*
 	* Pre: --

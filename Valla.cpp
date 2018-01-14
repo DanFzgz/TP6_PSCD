@@ -78,61 +78,46 @@ void Valla::mostrar2(string url){
     ++vallasLibres;
 
     cv.notify_all();
-
 }
 
 void Valla::mostrar(queue<string>& cola){
 
 	unique_lock<mutex> lck(mtx);
 
-	if(vallas[0] && !cola.empty()){
-		string url = cola.front();
-		cola.pop();
-		restarPeticion();
-		lck.unlock();
-		mostrar1(url);
-		++numIm;
-		tiempoTotal+=tiempo;
+	while(!finish){
+		while(cola.empty() || vallasLibres==0){
+			cout << "Entro al wait\n";
+			cv.wait(lck);
+			cout << "Salgo del wait\n";
+		}
+		if(vallas[0]){
+			string url = cola.front();
+			cola.pop();
+			restarPeticion();
+			lck.unlock();
+			mostrar1(url);
+			++numIm;
+			tiempoTotal+=tiempo;
+		}
+		else if(vallas[1]){
+			string url = cola.front();
+			cola.pop();
+			restarPeticion();
+			lck.unlock();
+			mostrar2(url);
+			++numIm;
+			tiempoTotal+=tiempo;
+		}
 	}
-	else if(vallas[1] && !cola.empty()){
-		string url = cola.front();
-		cola.pop();
-		restarPeticion();
-		lck.unlock();
-		mostrar2(url);
-		++numIm;
-		tiempoTotal+=tiempo;
-	}
-}
-
-void Valla::fin(){
-
 }
 
 void Valla::terminar(){
 	finish = true;
 }
 
-bool Valla::ended(){
-    return finish;
-}
-
-bool Valla::libre1(){
-    return vallas[0];
-}
-
-bool Valla::libre2(){
-    return vallas[1];
-}
-
-void Valla::sumarImagenes(){
-	unique_lock<mutex> lck(mtx);
-	numIm++;
-}
-
-void Valla::sumarTiempo(double t){
-	unique_lock<mutex> lck(mtx);
-	tiempoTotal=tiempoTotal+t;
+void Valla::avisar(){
+	cout << "Aviso\n";
+    cv.notify_all();
 }
 
 void Valla::sumarPeticion(){
