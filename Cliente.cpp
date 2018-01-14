@@ -20,7 +20,7 @@ const int MESSAGE_SIZE = 4001; //mensajes de no más 4000 caracteres
 int main(int argc,char *argv[]) {
 	const string MENS_FIN("END OF SERVICE");
     // Dirección y número donde escucha el proceso servidor
-    string SERVER_ADDRESS = "localhost";
+    string SERVER_ADDRESS = atoi(argv[0]);
     int SERVER_PORT = atoi(argv[1]);
 	char url[500];
 	if(argc==3){
