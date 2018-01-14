@@ -24,7 +24,7 @@ queue<int> cola_tiempo;
 
 //-------------------------------------------------------------
 void administrador(Socket&soc,int numSocket) {
-	cout << "Soy el administrador" << endl;
+	cout << "Soy el administrador\n";
 	string orden;
 	cin>> orden;
 	while(orden.compare("Finalizar")!=0){
@@ -51,9 +51,9 @@ void administrador(Socket&soc,int numSocket) {
 //-------------------------------------------------------------
 
 void subastador(){
-	cout << "La proxima subasta comenzara en 5 segundos " << endl;
-	this_thread::sleep_for(chrono::seconds(5));
 	s.iniciarSubasta();
+	cout << "Minimo de clientes alcanzado, la proxima subasta comenzara en 5 segundos\n";
+	this_thread::sleep_for(chrono::seconds(5));
 	cout <<"Empieza la subasta" <<endl;
 	while(!s.acabaSubasta()){
 		while(!s.hayGanadores()){
@@ -68,15 +68,15 @@ void subastador(){
 		if(ganador>0){
 			cout<< "El concursante" << ganador <<"ha ganado la subasta con " <<precio <<endl;
 			s.esperarMensaje();
-			cout << "La proxima subasta comenzara en 5 segundos " << endl;
-			this_thread::sleep_for(chrono::seconds(5));
 			s.iniciarSubasta();
+			cout << "Minimo de clientes alcanzado, la proxima subasta comenzara en 5 segundos\n";
+			this_thread::sleep_for(chrono::seconds(5));
 		}
 		else{
-			cout <<"Subasta finalizada con precio inferior al minimo" <<endl;
-			cout << "La proxima subasta comenzara en 5 segundos " << endl;
-			this_thread::sleep_for(chrono::seconds(5));
+			cout <<"Subasta finalizada con precio inferior al minimo\n";
 			s.iniciarSubasta();
+			cout << "Minimo de clientes alcanzado, la proxima subasta comenzara en 5 segundos\n";
+			this_thread::sleep_for(chrono::seconds(5));
 		}
 
 	}
