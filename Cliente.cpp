@@ -72,7 +72,7 @@ int main(int argc,char *argv[]) {
 			cout << buffer <<endl;
 		}
 		else{
-			cout << buffer <<" : ";
+			cout << buffer <<"(y/n) : ";
 			cin >> mensaje;
 			int send_bytes=socket.Send(socket_fd,mensaje);
 			if(send_bytes == -1){
