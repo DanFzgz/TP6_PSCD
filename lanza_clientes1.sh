@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-EXEC="./bin/Cliente"
+EXEC="./Cliente"
 IP=$1
 PORT=$2
 URL=$3
-echo "y\ny\ny\nn\ny\nn\n" |$EXEC $IP $PORT $URL 
+echo "y\ny\ny\nn\ny\nn\n" |$EXEC $IP $PORT $URL
 
- $EXEC $IP $PORT $URL  
- 
- 
+ $EXEC $IP $PORT $URL

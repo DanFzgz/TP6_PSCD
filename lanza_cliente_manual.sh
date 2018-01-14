@@ -5,9 +5,9 @@ if [ "$#" -ne 3 ]; then
   exit 1
 fi
 
-EXEC="./bin/Cliente"
+EXEC="./Cliente"
 SERVER=$1
 PORT=$2;
 URL=$3;
 
- $EXEC $PORT $URL
+ $EXEC $SERVER $PORT $URL

@@ -129,6 +129,7 @@ void servCliente(Socket& soc, int client_fd) {
 			soc.Send(client_fd,mensaje);
 			soc.Recv(client_fd,url,MAX_BUFFER);
 			cola_url.push(url);
+			v.sumarPeticion();
 			//cola.notify_all();
 			s.mensaje();
 			cout <<"URL: " << url <<endl;

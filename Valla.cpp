@@ -88,14 +88,20 @@ void Valla::mostrar(queue<string>& cola){
 	if(vallas[0] && !cola.empty()){
 		string url = cola.front();
 		cola.pop();
+		restarPeticion();
 		lck.unlock();
 		mostrar1(url);
+		++numIm;
+		tiempoTotal+=tiempo;
 	}
 	else if(vallas[1] && !cola.empty()){
 		string url = cola.front();
 		cola.pop();
+		restarPeticion();
 		lck.unlock();
 		mostrar2(url);
+		++numIm;
+		tiempoTotal+=tiempo;
 	}
 }
 
