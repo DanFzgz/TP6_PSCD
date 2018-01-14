@@ -1,4 +1,12 @@
-
+//*****************************************************************
+// File:	Subasta.hpp
+// Authors: Adrian Garcia Saez-Benito (NIP: 722292)
+//			Jorge Fernandez Muñoz (NIP: 721529)
+//			David Lacarta Anadon (NIP: 721511)
+// Date:	Noviembre/Diciembre 2017
+// Coms:	Monitor encargado de gestionar las Subastas del
+//			trabajo practico de PSCD.
+//*****************************************************************
 #ifndef SUBASTA_H
 #define SUBASTA_H
 
@@ -31,7 +39,7 @@ public:
 	* Constructor
 	*/
 	Subasta();
-	
+
 	/*
 	*
 	* Pre: --
@@ -40,7 +48,7 @@ public:
 	*
 	*/
 	void quieroParticipar();
-	
+
 	/*
 	*
 	* Pre:--
@@ -49,16 +57,16 @@ public:
 	*
 	*/
 	void quieroIrme();
-	
+
 	/*
 	*
-	* Pre: "cantidad" es el precio que ofrece el cliente "numSocket" en euros, y 0<=codigo<=2  
+	* Pre: "cantidad" es el precio que ofrece el cliente "numSocket" en euros, y 0<=codigo<=2
 	*
 	* Post: Si el codigo es 0, la puja tiene exito, si es 1 no y si es 2 significa que el cliente habia decidido abandonar la subasta
 	*
 	*/
 	void participo(int cantidad, int numSocket,int codigo);
-	
+
 	/*
 	*
 	* Pre:--
@@ -67,7 +75,7 @@ public:
 	*
 	*/
 	void iniciarSubasta();
-	
+
 	/*
 	*
 	* Pre:--
@@ -76,7 +84,7 @@ public:
 	*
 	*/
 	void finalizarSubastas();
-	
+
 	/*
 	*
 	* Pre:--
@@ -85,7 +93,7 @@ public:
 	*
 	*/
 	void iniciarRonda();
-	
+
 	/*
 	*
 	* Pre:--
@@ -94,7 +102,7 @@ public:
 	*
 	*/
 	void finalizarRonda();
-	
+
 	/*
 	*
 	* Pre:--
@@ -103,7 +111,7 @@ public:
 	*
 	*/
 	bool acabaSubasta();
-	
+
 	/*
 	*
 	* Pre:--
@@ -112,7 +120,7 @@ public:
 	*
 	*/
 	int proximoPrecio();
-	
+
 	/*
 	*
 	* Pre:--
@@ -121,7 +129,7 @@ public:
 	*
 	*/
 	bool hayGanadores();
-	
+
 	/*
 	*
 	* Pre:--
@@ -130,7 +138,7 @@ public:
 	*
 	*/
 	int ganador();
-	
+
 	/*
 	*
 	* Pre:--
@@ -139,7 +147,7 @@ public:
 	*
 	*/
 	int precio();
-	
+
 	/*
 	*
 	* Pre:--
@@ -148,7 +156,7 @@ public:
 	*
 	*/
 	void mensaje();
-	
+
 	/*
 	*
 	* Pre:--
@@ -157,7 +165,7 @@ public:
 	*
 	*/
 	void esperarMensaje();
-	
+
 	/*
 	*
 	* Pre:--

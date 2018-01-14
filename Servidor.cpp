@@ -1,9 +1,10 @@
-//******************************************************************
-// File:   ServidorMulticliente.cpp
-// Author: PSCD-Unizar
-// Date:   Noviembre 2015
-// Coms:   Ejemplo de servidor multicliente con comunicación síncrona mediante sockets
-//         Compilar el fichero "Makefile" asociado, mediante "make".
+//*****************************************************************
+// File:	Servidor.cpp
+// Authors: Adrian Garcia Saez-Benito (NIP: 722292)
+//			Jorge Fernandez Muñoz (NIP: 721529)
+//			David Lacarta Anadon (NIP: 721511)
+// Date:	Noviembre/Diciembre 2017
+// Coms:	Servidor del TP6 de PSCD
 //*****************************************************************
 
 #include "Socket.hpp"

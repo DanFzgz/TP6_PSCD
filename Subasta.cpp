@@ -1,4 +1,12 @@
-
+//*****************************************************************
+// File:	Subasta.cpp
+// Authors: Adrian Garcia Saez-Benito (NIP: 722292)
+//			Jorge Fernandez Muñoz (NIP: 721529)
+//			David Lacarta Anadon (NIP: 721511)
+// Date:	Noviembre/Diciembre 2017
+// Coms:	Monitor encargado de gestionar las Subastas del
+//			trabajo practico de PSCD.
+//*****************************************************************
 #include "Subasta.hpp"
 
 

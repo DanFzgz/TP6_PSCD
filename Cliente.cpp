@@ -1,10 +1,10 @@
 //*****************************************************************
-// File:   Cliente.cpp
-// Author: PSCD-Unizar
-// Date:   noviembre 2015
-// Coms:   Ejemplo de cliente con comunicación síncrona mediante sockets
-//         Compilar el fichero "Makefile" asociado, mediante
-//         "make".
+// File:	Cliente.cpp
+// Authors: Adrian Garcia Saez-Benito (NIP: 722292)
+//			Jorge Fernandez Muñoz (NIP: 721529)
+//			David Lacarta Anadon (NIP: 721511)
+// Date:	Enero 2018
+// Coms:	Cliente del TP6 de PSCD
 //*****************************************************************
 
 #include <iostream>

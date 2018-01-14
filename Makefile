@@ -33,7 +33,7 @@ IMDOWNLOADER=ImageDownloader
 # FLAGS DE COMPILACION #
 # #################### #
 CPPFLAGS=-I. -I/usr/local/include -I/opt/X11/include -O2 -std=c++11  # -lsockets Flags compilacion
-LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm  -lcurl -lX11 # -pthreadFlags linkado threads
+LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm  -lcurl -lX11 # -pthread Flags linkado threads
 ##SOCKETSFLAGS=-lsocket -lnsl # Flags linkado sockets (Solaris SunOS). Descomentar para usar en hendrix
 
 .PHONY:all
