@@ -1,0 +1,26 @@
+721511  Apellidos             Nombre
+-------------------------------------
+721529  Fernández Muñoz        Jorge
+722292  García Saez-Benito     Adrián
+721511  Lacarta Anadón         David
+
+Informe de dedicación
+
+-Fernández Muñoz, Jorge
+Alrededor del 18 de diciembre - 1 hora de análisis de la subasta
+Alrededor del 22-23 de diciembre - ~5 horas para el diseño de subasta + comienzo de la implementación
+Principio de enero - ~6 horas Finalización de subasta y diseño e implementación de servidor
+
+-García Saez-Benito, Adrián
+23 de diciembre - 2 horas diseño del módulo valla
+26-27 de diciembre - 4 horas implementación del módulo valla
+
+-Lacarta Anadón, David
+23 de diciembre - 1 hora diseño de informador
+27 de diciembre - 1 hora implementación de informador
+Principio de enero -  ~2 horas Documentación de los diferentes módulos
+
+-Trabajo conjunto
+2-14 enero - ~20 horas pruebas y corrección de errores de los distintos módulos
+
+
