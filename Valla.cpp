@@ -97,29 +97,29 @@ void Valla::fin(){
 	}
 }
 
-void Subasta::sumarImagenes(){
+void Valla::sumarImagenes(){
 	unique_lock<mutex> lck(mut);
 	numIm++;
 }
 
-void Subasta::sumarTiemo(double t){
+void Valla::sumarTiemo(double t){
 	unique_lock<mutex> lck(mut);
 	tiempoTotal=tiempoTotal+t;
 }
 
-void Subasta::sumarPeticion(){
+void Valla::sumarPeticion(){
 	unique_lock<mutex> lck(mut);
 	petEncoladas++;
 }
 
-void Subasta::restarPeticion(){
+void Valla::restarPeticion(){
 	unique_lock<mutex> lck(mut);
 	petEncoladas--;
 }
 
 
 
-void Subasta::informar(){
+void Valla::informar(){
 	unique_lock<mutex> lck(mut);
 	cout << "INFORMACION HISTORICA DEL SISTEMA\n"
 		 << "#################################"
