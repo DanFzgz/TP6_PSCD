@@ -18,6 +18,8 @@ using namespace std;
 
 Subasta s;
 Valla v;
+queue<string> cola_url;
+queue<int> cola_tiempo;
 
 //-------------------------------------------------------------
 void administrador(Socket&soc,int numSocket) {
@@ -26,7 +28,7 @@ void administrador(Socket&soc,int numSocket) {
 	cin>> orden;
 	while(orden.compare("Finalizar")!=0){
 		if(orden.compare("Informar")==0){
-			s.informar();
+			v.informar();
 		}
 		cin >>orden;
 	}
@@ -119,7 +121,8 @@ void servCliente(Socket& soc, int client_fd) {
 			mensaje="URL que desearia mostrar: ";
 			soc.Send(client_fd,mensaje);
 			soc.Recv(client_fd,url,MAX_BUFFER);
-			v.atender(url, 5);
+			cola_url.push(url);
+			//cola.notify_all();
 			s.mensaje();
 			cout <<"URL: " << url <<endl;
 		}
@@ -138,6 +141,26 @@ void servCliente(Socket& soc, int client_fd) {
 		soc.Close(client_fd);
 	}
 }
+
+void atender(){
+
+	string url;
+	while(!v.ended()){
+		/*while(cola_url.empty()){
+			cola.wait(lck);
+		}*/
+		if(v.libre1()){
+			url = cola_url.front();
+			cola_url.pop();
+			v.mostrar1(url);
+		}
+		else if(v.libre2()){
+			url = cola_url.front();
+			cola_url.pop();
+			v.mostrar2(url);
+		}
+	}
+}
 //-------------------------------------------------------------
 int main(int argc,char *argv[]) {
 	const int N = 5;
@@ -147,6 +170,8 @@ int main(int argc,char *argv[]) {
     thread cliente[N];
 	thread subasta;
 	thread admin;
+	thread valla1;
+	thread valla2;
     int client_fd[N];
 
 		//srand(time(NULL));
@@ -173,7 +198,9 @@ int main(int argc,char *argv[]) {
 	}
 
 	admin = thread(&administrador,ref(socket),socket_fd);
-	subasta= thread(&subastador);
+	subasta = thread(&subastador);
+	valla1 = thread(&atender);
+	valla2 = thread(&atender);
 	int i=0;
 	while(i<max_connections && !s.acabaSubasta()) {
 		// Accept
@@ -185,7 +212,7 @@ int main(int argc,char *argv[]) {
 			socket.Close(socket_fd);
 			break;
 		}
-		cout << "nuevoCliente aceptado" <<endl;
+		cout << "Nuevo cliente aceptado" <<endl;
 		thread t = thread(&servCliente, ref(socket), client_fd[i]);
 		t.detach();
 		i++;

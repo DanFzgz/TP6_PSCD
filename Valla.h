@@ -9,6 +9,7 @@
 //*****************************************************************
 
 #include <mutex>
+#include <iostream>
 #include <condition_variable>
 #include <queue>
 #include <string>
@@ -31,84 +32,68 @@ private:
 	ImageDownloader downloader;
 
 	mutex mtx;
-	condition_variable libre;
-	condition_variable cola_espera;
-	condition_variable finaliza;
-
-	queue<string> cola;
-
-	string laUrl;
-
+	condition_variable cv;
 
 	int laValla;
 	int vallasLibres;
+	int tiempo;
 
+	bool finish;
 	bool vallas[numVallas];
 
-	int numIm; //numero de imagenes mostradas 
+	int numIm; //numero de imagenes mostradas
 	double tiempoTotal; // tiempo total de imagenes mostrandose
 	int petEncoladas; // numero de peticiones encoladas
-	double tiempoEstimado // tiempo contratado estimado
+	double tiempoEstimado; // tiempo contratado estimado
 
-	/*
-	* Pre:	"url" contiene la URL donde está alojada la imagen a mostrar, "tiempo"
-	*		es el tiempo que se va a mostrar y "valla" es el numero de valla en
-	*		la que se va a mostrar.
-	* Post:	La imagen contenida en la URL "url" ha sido mostrada en la Valla
-	*		numero "valla" durante "tiempo" segundos.
-	*/
-	void mostrar(string url, int valla, int tiempo);
 
 public:
 
-	/*
-	* Constructor.
-	*/
 	Valla();
 
-	/*
-	* Pre:	"url" es la URL de la imagen a mostrar en la Valla "valla" durante
-	*		"tiempo" segundos.
-	* Post:	Se ha mostrado la imagen contenida en la URL "url" en la Valla
-	*		"valla" durante "tiempo" segundos.
-	*/
-	void atender(string url, int tiempo);
+    void mostrar1(string url);
 
-	/*
-	* Pre:--
-	*
-	* Post: cola.empty() && vallasLibres == 0
-	*/
-	void fin();
-	
+    void mostrar2(string url);
+
+    void fin();
+
+    void terminar();
+
+    bool ended();
+
+    bool libre1();
+
+    bool libre2();
+
 	/*
 	* Pre: --
 	*
 	* Post: Se incrementa en 1 el numero de imagenes mostradas
 	*/
 	void sumarImagenes();
-	
+
 	/*
 	* Pre: "t" es un tiempo en segundos
 	*
 	* Post: Se incrementa en t el tiempo total que las imagenes han estado en pantalla
 	*/
-	void sumarTiempo();
-	
+	void sumarTiempo(double t);
+
 	/*
 	* Pre: --
 	*
 	* Post: Se incrementa en 1 el numero de peticiones encoladas
 	*/
 	void sumarPeticion();
-	
+
 	/*
 	* Pre: --
 	*
 	* Post: Se decrementa en 1 el numero de peticiones encoladas
 	*/
 	void restarPeticion();
-	
+
+	void informar();
 };
 
 #endif
