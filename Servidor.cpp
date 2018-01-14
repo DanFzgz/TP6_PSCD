@@ -11,15 +11,17 @@
 #include <thread>
 #include <cstring> //manejo de cadenas tipo C
 #include <cstdlib>
-#include "subasta.hpp"
+#include "Subasta.hpp"
+#include "Valla.h"
 
 using namespace std;
 
 Subasta s;
+Valla v;
 
 //-------------------------------------------------------------
 void administrador(Socket&soc,int numSocket) {
-	cout << "Soy el administrador" <<endl;
+	cout << "Soy el administrador" << endl;
 	string orden;
 	cin>> orden;
 	while(orden.compare("Finalizar")!=0){
@@ -52,7 +54,7 @@ void subastador(){
 			s.finalizarRonda();
 			cout <<"Acabo ronda" <<endl;
 		}
-		
+
 		int ganador=s.ganador();
 		int precio= s.precio();
 		if(ganador>0){
@@ -70,7 +72,7 @@ void subastador(){
 }
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd) {
-	int MAX_BUFFER=50;
+	int MAX_BUFFER=200;
 	s.quieroParticipar();
 	string mensaje;
 	string buffer;
@@ -114,6 +116,7 @@ void servCliente(Socket& soc, int client_fd) {
 			mensaje="URL que desearia mostrar: ";
 			soc.Send(client_fd,mensaje);
 			soc.Recv(client_fd,url,MAX_BUFFER);
+			v.atender(url, 5);
 			s.mensaje();
 			cout <<"URL: " << url <<endl;
 		}

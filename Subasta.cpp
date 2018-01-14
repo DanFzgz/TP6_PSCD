@@ -1,7 +1,5 @@
-#include <iostream>
-#include <fstream>
-#include <queue>
-#include <subasta.hpp>
+
+#include "Subasta.hpp"
 
 
 Subasta::Subasta(){
@@ -22,7 +20,7 @@ void Subasta::quieroParticipar(){
 		subasta.wait(lck);
 	}
 	numClientes++;
-	cout <<" nuevo participante apuntado" <<endl;
+	cout << "Nuevo participante apuntado" <<endl;
 	esperaSubasta.notify_all();
 }
 
@@ -69,7 +67,7 @@ void Subasta::participo(int cantidad, int numSocket,int codigo){
 
 void Subasta::iniciarSubasta(){
 	unique_lock<mutex> lck(mut);
-	while(numClientes<1|| numMensajes!=1){
+	while(numClientes<3 || numMensajes!=1){
 		esperaSubasta.wait(lck);
 	}
 	FondoReserva=70;

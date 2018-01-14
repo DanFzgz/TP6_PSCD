@@ -1,13 +1,12 @@
 
-
-
 #ifndef SUBASTA_H
 #define SUBASTA_H
 
 #include <mutex>
 #include <condition_variable>
-#include <assert.h>
 #include <queue>
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 
