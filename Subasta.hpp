@@ -1,3 +1,6 @@
+
+
+
 #ifndef SUBASTA_H
 #define SUBASTA_H
 
@@ -41,6 +44,5 @@ public:
 	void esperarMensaje();
 	void llegaMensaje();
 };
-	
+
 #endif
-	
