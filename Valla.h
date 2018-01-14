@@ -23,59 +23,41 @@
 using namespace std;
 
 const int numVallas = 2;
-const int VALLA_WIDTH = 800;
-const int VALLA_HEIGHT = 800;
 
 class Valla{
 private:
 
-	ImageDownloader downloader;
-
 	mutex mtx;
-	condition_variable cv;
+	condition_variable cv, termina;
 
-	int vallasLibres;
-	int tiempo;
+	queue<string> cola;
 
 	bool finish;
-	bool vallas[numVallas];
 
 	int numIm; //numero de imagenes mostradas
 	double tiempoTotal; // tiempo total de imagenes mostrandose
 	int petEncoladas; // numero de peticiones encoladas
 	double tiempoEstimado; // tiempo contratado estimado
+	int contador;
 
 
 public:
 
 	Valla();
 
-    void mostrar1(string url);
-
-    void mostrar2(string url);
-
-	void mostrar(queue<string>& cola);
+	void mostrar(string& Url);
 
     void terminar();
 
-    void avisar();
+    void avisar(string url);
 
-
-	/*
-	* Pre: --
-	*
-	* Post: Se incrementa en 1 el numero de peticiones encoladas
-	*/
-	void sumarPeticion();
-
-	/*
-	* Pre: --
-	*
-	* Post: Se decrementa en 1 el numero de peticiones encoladas
-	*/
-	void restarPeticion();
+	void notificar();
 
 	void informar();
+
+	void iniciarValla();
+
+	void terminarValla();
 };
 
 #endif

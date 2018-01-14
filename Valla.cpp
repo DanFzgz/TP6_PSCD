@@ -11,126 +11,60 @@
 #include "Valla.h"
 
 Valla::Valla(){
-	vallasLibres = 2;
 	numIm=0;
 	tiempoTotal=0;
 	petEncoladas=0;
 	tiempoEstimado=0;
-	for(int x = 0; x<numVallas; ++x){ vallas[x] = true; }
 	finish = false;
-	tiempo = 60;
 }
 
-void Valla::mostrar1(string url){
 
-    vallas[0]=false;
-    --vallasLibres;
-
-	char URL[500];
-	for(int x=0; x<url.length();++x){
-		URL[x] = url[x];
-	}
-	char path[100] = "1.jpg";
-	char nombreValla[10] = "Valla 1";
-
-	// Creamos una valla publicitaria con una imagen
-
-	downloader.downloadImage(URL, path);
-	cimg_library::CImg<unsigned char> img_principal(path);
-	cimg_library::CImgDisplay valla1(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
-	valla1.resize(VALLA_WIDTH,VALLA_HEIGHT);
-	valla1.move(0, 0);
-
-	// Mostrar imagen durante tiempo segundos
-	valla1.wait(tiempo*1000);
-
-    vallas[0]=true;
-    ++vallasLibres;
-
-    cv.notify_all();
-
-}
-
-void Valla::mostrar2(string url){
-
-    vallas[1]=false;
-    --vallasLibres;
-
-    char URL[500];
-    for(int x=0; x<url.length();++x){
-        URL[x] = url[x];
-    }
-    char path[100] = "2.jpg";
-    char nombreValla[10] = "Valla 2";
-
-    // Creamos una valla publicitaria con una imagen
-
-    downloader.downloadImage(URL, path);
-    cimg_library::CImg<unsigned char> img_principal(path);
-    cimg_library::CImgDisplay valla2(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
-    valla2.resize(VALLA_WIDTH,VALLA_HEIGHT);
-    valla2.move(VALLA_WIDTH, 0);
-
-    // Mostrar imagen durante tiempo segundos
-    valla2.wait(tiempo*1000);
-
-    vallas[1]=true;
-    ++vallasLibres;
-
-    cv.notify_all();
-}
-
-void Valla::mostrar(queue<string>& cola){
+void Valla::mostrar(string& url){
 
 	unique_lock<mutex> lck(mtx);
 
-	while(!finish){
-		while(cola.empty() || vallasLibres==0){
-			cout << "Entro al wait\n";
+	if(finish && cola.empty()){
+		url = "";
+	}
+	else{
+		while(cola.empty() && !finish){
 			cv.wait(lck);
-			cout << "Salgo del wait\n";
 		}
-		if(vallas[0]){
-			string url = cola.front();
-			cola.pop();
-			restarPeticion();
-			lck.unlock();
-			mostrar1(url);
-			++numIm;
-			tiempoTotal+=tiempo;
+		if(finish && cola.empty()){
+			url="";
 		}
-		else if(vallas[1]){
-			string url = cola.front();
+		else{
+			url = cola.front();
 			cola.pop();
-			restarPeticion();
-			lck.unlock();
-			mostrar2(url);
+			--petEncoladas;
 			++numIm;
-			tiempoTotal+=tiempo;
+			tiempoTotal+=60;
 		}
 	}
 }
 
 void Valla::terminar(){
+	unique_lock<mutex> lck(mtx);
 	finish = true;
+	while(contador > 0){
+		termina.wait(lck);
+	}
 }
 
-void Valla::avisar(){
-	cout << "Aviso\n";
-    cv.notify_all();
-}
-
-void Valla::sumarPeticion(){
+void Valla::notificar(){
 	unique_lock<mutex> lck(mtx);
+
+	cv.notify_all();
+}
+
+void Valla::avisar(string url){
+
+	unique_lock<mutex> lck(mtx);
+	cola.push(url);
+    cv.notify_one();
 	petEncoladas++;
+
 }
-
-void Valla::restarPeticion(){
-	unique_lock<mutex> lck(mtx);
-	petEncoladas--;
-}
-
-
 
 void Valla::informar(){
 	unique_lock<mutex> lck(mtx);
@@ -143,4 +77,16 @@ void Valla::informar(){
 		 << "##################################"
 		 << "Numero de peticiones encoladas: " << petEncoladas << "\n"
 		 << "Tiempo contratado estimado: " << tiempoEstimado << endl;
+}
+
+
+void Valla::iniciarValla(){
+	unique_lock<mutex> lck(mtx);
+	contador++;
+}
+
+void Valla::terminarValla(){
+	unique_lock<mutex> lck(mtx);
+	contador--;
+	termina.notify_all();
 }

@@ -15,12 +15,18 @@
 #include "Subasta.hpp"
 #include "Valla.h"
 
+
 using namespace std;
 
 Subasta s;
 Valla v;
-queue<string> cola_url;
-queue<int> cola_tiempo;
+
+ImageDownloader downloader;
+
+
+int tiempo = 60;
+const int VALLA_WIDTH = 800;
+const int VALLA_HEIGHT = 800;
 
 //-------------------------------------------------------------
 void administrador(Socket&soc,int numSocket) {
@@ -34,19 +40,16 @@ void administrador(Socket&soc,int numSocket) {
 		cin >>orden;
 	}
 	s.finalizarSubastas();
+	// Cerramos el socket del servidor
+	int error_code = soc.Close(numSocket);
+	if(error_code == -1) {
+		cerr << "Error cerrando el socket del servidor: " << strerror(errno) << endl;
+	}
 	v.terminar();
 	s.llegaMensaje();
 
-
-    // Cerramos el socket del servidor
-    int error_code = soc.Close(numSocket);
-    if(error_code == -1) {
-		cerr << "Error cerrando el socket del servidor: " << strerror(errno) << endl;
-	}
-
 	// Mensaje de despedida
 	cout << "Bye bye" << endl;
-	exit(0);
 }
 
 //-------------------------------------------------------------
@@ -82,6 +85,7 @@ void subastador(){
 
 	}
 	cout <<"Subastas finalizadas" <<endl;
+	v.notificar();
 }
 //-------------------------------------------------------------
 void servCliente(Socket& soc, int client_fd) {
@@ -129,9 +133,7 @@ void servCliente(Socket& soc, int client_fd) {
 			mensaje="URL que desearia mostrar: ";
 			soc.Send(client_fd,mensaje);
 			soc.Recv(client_fd,url,MAX_BUFFER);
-			cola_url.push(url);
-			v.avisar();
-			v.sumarPeticion();
+			v.avisar(url);
 			//cola.notify_all();
 			s.mensaje();
 			cout <<"URL: " << url <<endl;
@@ -152,8 +154,63 @@ void servCliente(Socket& soc, int client_fd) {
 	}
 }
 
-void atender(){
-	v.mostrar(cola_url);
+void mostrar1(string url){
+	char URL[500];
+	for(int x=0; x<url.length();++x){
+		URL[x] = url[x];
+	}
+	char path[100] = "1.jpg";
+	char nombreValla[10] = "Valla 1";
+
+	// Creamos una valla publicitaria con una imagen
+
+	downloader.downloadImage(URL, path);
+	cimg_library::CImg<unsigned char> img_principal(path);
+	cimg_library::CImgDisplay valla1(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
+	valla1.resize(VALLA_WIDTH,VALLA_HEIGHT);
+	valla1.move(0, 0);
+
+	// Mostrar imagen durante tiempo segundos
+	valla1.wait(tiempo*1000);
+}
+
+void mostrar2(string url){
+    char URL[500];
+    for(int x=0; x<url.length();++x){
+        URL[x] = url[x];
+    }
+    char path[100] = "2.jpg";
+    char nombreValla[10] = "Valla 2";
+
+    // Creamos una valla publicitaria con una imagen
+
+    downloader.downloadImage(URL, path);
+    cimg_library::CImg<unsigned char> img_principal(path);
+    cimg_library::CImgDisplay valla2(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
+    valla2.resize(VALLA_WIDTH,VALLA_HEIGHT);
+    valla2.move(VALLA_WIDTH, 0);
+
+    // Mostrar imagen durante tiempo segundos
+    valla2.wait(tiempo*1000);
+}
+
+void atender(int id_valla){
+	v.iniciarValla();
+	cout << "Inicio thread\n";
+	string url;
+	v.mostrar(url);
+	while(!url.empty()){
+		cout << "Voy a mostrar\n";
+		if(id_valla==1){
+			mostrar1(url);
+		}
+		else if(id_valla==2){
+			mostrar2(url);
+		}
+		v.mostrar(url);
+	}
+	cout << "Termino thread\n";
+	v.terminarValla();
 }
 //-------------------------------------------------------------
 int main(int argc,char *argv[]) {
@@ -193,8 +250,8 @@ int main(int argc,char *argv[]) {
 
 	admin = thread(&administrador,ref(socket),socket_fd);
 	subasta = thread(&subastador);
-	valla1 = thread(&atender);
-	valla2 = thread(&atender);
+	valla1 = thread(&atender, 1);
+	valla2 = thread(&atender, 2);
 	int i=0;
 	while(i<max_connections && !s.acabaSubasta()) {
 		// Accept
@@ -213,6 +270,8 @@ int main(int argc,char *argv[]) {
 	}
 	subasta.join();
 	admin.join();
+	valla1.join();
+	valla2.join();
     return 0;
 }
 //-------------------------------------------------------------
