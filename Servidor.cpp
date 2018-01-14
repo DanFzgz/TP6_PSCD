@@ -109,7 +109,7 @@ void servCliente(Socket& soc, int client_fd) {
 			else if(buffer.compare("n")==0){
 				s.participo(precio,client_fd,1);
 			}
-			else{
+			else if(buffer.compare("y")==0){
 				s.participo(precio,client_fd,0);
 			}
 		}
