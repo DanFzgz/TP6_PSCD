@@ -65,7 +65,7 @@ int main(int argc,char *argv[]) {
 			terminar=true;
 		}
 		else if(buffer.compare("URL que desearia mostrar: ")==0){
-			if(argc==3){
+			if(argc==4){
 				socket.Send(socket_fd,url);
 			}
 			else{
@@ -83,7 +83,7 @@ int main(int argc,char *argv[]) {
 		else{
 			cout << buffer <<"(y/n) : ";
 			cin >> mensaje;
-			while(mensaje.compare("n")!= 0 || mensaje.compare("y") != 0|| mensaje.size()==0){
+			while(mensaje.compare("n")!= 0 && mensaje.compare("y") != 0 && mensaje.size()==0){
 				cout << "Comando no reconocido" << endl;
 				cout << buffer <<"(y/n) : ";
 				cin >> mensaje;

@@ -85,17 +85,16 @@ void Valla::mostrar(queue<string>& cola){
 
 	unique_lock<mutex> lck(mtx);
 
-
 	if(vallas[0] && !cola.empty()){
 		string url = cola.front();
 		cola.pop();
-		unique_lock<mutex> unlock(mtx);
+		lck.unlock();
 		mostrar1(url);
 	}
 	else if(vallas[1] && !cola.empty()){
 		string url = cola.front();
 		cola.pop();
-		unique_lock<mutex> unlock(mtx);
+		lck.unlock();
 		mostrar2(url);
 	}
 }
