@@ -11,6 +11,7 @@
 #include <thread>
 #include <cstring> //manejo de cadenas tipo C
 #include <cstdlib>
+#include <chrono>
 #include "Subasta.hpp"
 #include "Valla.h"
 
@@ -48,6 +49,8 @@ void administrador(Socket&soc,int numSocket) {
 //-------------------------------------------------------------
 
 void subastador(){
+	cout << " La proxima subasta comenzará en 5 segundos" << endl;
+	this_thread::sleep_for (chrono::seconds(5));
 	s.iniciarSubasta();
 	cout <<"Empieza la subasta" <<endl;
 	while(!s.acabaSubasta()){
@@ -63,10 +66,14 @@ void subastador(){
 		if(ganador>0){
 			cout<< "El concursante" << ganador <<"ha ganado la subasta con " <<precio <<endl;
 			s.esperarMensaje();
+			cout << " La proxima subasta comenzará en 5 segundos" << endl;
+			this_thread::sleep_for (chrono::seconds(5));
 			s.iniciarSubasta();
 		}
 		else{
 			cout <<"Subasta finalizada con precio inferior al minimo" <<endl;
+			cout << " La proxima subasta comenzará en 5 segundos" << endl;
+			this_thread::sleep_for (chrono::seconds(5));
 			s.iniciarSubasta();
 		}
 
