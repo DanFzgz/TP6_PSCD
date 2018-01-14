@@ -74,6 +74,11 @@ int main(int argc,char *argv[]) {
 		else{
 			cout << buffer <<"(y/n) : ";
 			cin >> mensaje;
+			while(mensaje.compare("n")!= 0 || mensaje.compare("y") != 0){
+				cout << "Comando no reconocido" << endl;
+				cout << buffer <<"(y/n) : ";
+				cin >> mensaje;
+			}
 			int send_bytes=socket.Send(socket_fd,mensaje);
 			if(send_bytes == -1){
 				cerr << "Error al enviar datos: " << strerror(errno) << endl;
@@ -81,12 +86,11 @@ int main(int argc,char *argv[]) {
 				socket.Close(socket_fd);
 				exit(1);
 			}
-			if(mensaje.compare("retirar")==0){
-				cout <<"Abandono subasta" <<endl;
-				//terminar=true;
-			}
 			else if(mensaje.compare("n")==0){
 				cout << "Espero a otra subasta" <<endl;
+			}
+			else if(mensaje.compare("y")==0){
+				cout << "Intento subir la puja" << endl;
 			}
 		}
 	} while(!terminar);
