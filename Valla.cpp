@@ -17,110 +17,114 @@ Valla::Valla(){
 	petEncoladas=0;
 	tiempoEstimado=0;
 	for(int x = 0; x<numVallas; ++x){ vallas[x] = true; }
+	finish = false;
+	tiempo = 5;
 }
 
-void Valla::atender(string url, int tiempo){
+void Valla::mostrar1(string url){
 
-	unique_lock<mutex> lck(mtx);
-
-	if (vallasLibres == 0 || !cola.empty()){
-		cola.push(url);
-		petEncoladas++;
-		laUrl = cola.front();
-		while(laUrl != url){
-			cola_espera.wait(lck);
-			laUrl = cola.front();
-		}
-	}
-
-
-
-	while(vallasLibres == 0){
-		libre.wait(lck);
-	}
-
-	for(int laValla = 0; laValla < numVallas; ++laValla){
-		if(vallas[laValla]){
-			--vallasLibres;
-			vallas[laValla] = false;
-
-			mostrar(url, laValla+1, tiempo);
-			numIm++;
-			tiempototal=tiempoTotal+tiempo;
-		}
-	}
-	cola.pop();
-	petEncoladas--;
-	finaliza.notify_one();
-	cola_espera.notify_all();
-
-}
-void Valla::mostrar(string url, int numValla, int tiempo){
+    vallas[0]=false;
+    --vallasLibres;
 
 	char URL[500];
 	for(int x=0; x<url.length();++x){
 		URL[x] = url[x];
 	}
-	char path[100] = " .jpg";
-	char nombreValla[10] = "Valla  ";
-	int x = 0, y = 0;
+	char path[100] = "1.jpg";
+	char nombreValla[10] = "Valla 1";
 
 	// Creamos una valla publicitaria con una imagen
 
-	if(numValla == 1){
-		path[0] = 1 + '0';
-		nombreValla[6] = 1 + '0';
-	}
-	else if(numValla == 2) {
-		path[0] = 2 + '0';
-		nombreValla[6] = 2 + '0';
-		x = VALLA_WIDTH;
-	}
-
 	downloader.downloadImage(URL, path);
 	cimg_library::CImg<unsigned char> img_principal(path);
-	cimg_library::CImgDisplay valla(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
-	valla.resize(VALLA_WIDTH,VALLA_HEIGHT);
-	valla.move(x, y);
-
+	cimg_library::CImgDisplay valla1(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
+	valla1.resize(VALLA_WIDTH,VALLA_HEIGHT);
+	valla1.move(0, 0);
 
 	// Mostrar imagen durante tiempo segundos
-	valla.wait(tiempo*1000);
+	valla1.wait(tiempo*1000);
+
+    vallas[0]=true;
+    ++vallasLibres;
+
+    cv.notify_all();
+
+}
+
+void Valla::mostrar2(string url){
+
+    vallas[1]=false;
+    --vallasLibres;
+
+    char URL[500];
+    for(int x=0; x<url.length();++x){
+        URL[x] = url[x];
+    }
+    char path[100] = "2.jpg";
+    char nombreValla[10] = "Valla 2";
+
+    // Creamos una valla publicitaria con una imagen
+
+    downloader.downloadImage(URL, path);
+    cimg_library::CImg<unsigned char> img_principal(path);
+    cimg_library::CImgDisplay valla2(img_principal.resize(VALLA_WIDTH,VALLA_HEIGHT), nombreValla);
+    valla2.resize(VALLA_WIDTH,VALLA_HEIGHT);
+    valla2.move(VALLA_WIDTH, 0);
+
+    // Mostrar imagen durante tiempo segundos
+    valla2.wait(tiempo*1000);
+
+    vallas[1]=true;
+    ++vallasLibres;
+
+    cv.notify_all();
+
 }
 
 void Valla::fin(){
 
-	unique_lock<mutex> lck(mtx);
+}
 
-	while(!cola.empty() && vallasLibres == 2){
-		finaliza.wait(lck);
-	}
+void Valla::terminar(){
+	finish = true;
+}
+
+bool Valla::ended(){
+    return finish;
+}
+
+bool Valla::libre1(){
+    return vallas[0];
+}
+
+bool Valla::libre2(){
+    return vallas[1];
 }
 
 void Valla::sumarImagenes(){
-	unique_lock<mutex> lck(mut);
+	unique_lock<mutex> lck(mtx);
 	numIm++;
 }
 
-void Valla::sumarTiemo(double t){
-	unique_lock<mutex> lck(mut);
+void Valla::sumarTiempo(double t){
+	unique_lock<mutex> lck(mtx);
 	tiempoTotal=tiempoTotal+t;
 }
 
 void Valla::sumarPeticion(){
-	unique_lock<mutex> lck(mut);
+	unique_lock<mutex> lck(mtx);
 	petEncoladas++;
 }
 
 void Valla::restarPeticion(){
-	unique_lock<mutex> lck(mut);
+	unique_lock<mutex> lck(mtx);
 	petEncoladas--;
 }
 
 
 
 void Valla::informar(){
-	unique_lock<mutex> lck(mut);
+	unique_lock<mutex> lck(mtx);
 	cout << "INFORMACION HISTORICA DEL SISTEMA\n"
 		 << "#################################"
 		 << "Numero de imagenes mostradas: " << numIm << "\n"
