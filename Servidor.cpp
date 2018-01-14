@@ -25,6 +25,9 @@ void administrador(Socket&soc,int numSocket) {
 	string orden;
 	cin>> orden;
 	while(orden.compare("Finalizar")!=0){
+		if(orden.compare("Informar")==0){
+			s.informar();
+		}
 		cin >>orden;
 	}
 	s.finalizarSubastas();

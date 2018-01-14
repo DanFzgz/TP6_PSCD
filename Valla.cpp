@@ -12,6 +12,10 @@
 
 Valla::Valla(){
 	vallasLibres = 2;
+	numIm=0;
+	tiempoTotal=0;
+	petEncoladas=0;
+	tiempoEstimado=0;
 	for(int x = 0; x<numVallas; ++x){ vallas[x] = true; }
 }
 
@@ -21,6 +25,7 @@ void Valla::atender(string url, int tiempo){
 
 	if (vallasLibres == 0 || !cola.empty()){
 		cola.push(url);
+		petEncoladas++;
 		laUrl = cola.front();
 		while(laUrl != url){
 			cola_espera.wait(lck);
@@ -38,10 +43,14 @@ void Valla::atender(string url, int tiempo){
 		if(vallas[laValla]){
 			--vallasLibres;
 			vallas[laValla] = false;
+
 			mostrar(url, laValla+1, tiempo);
+			numIm++;
+			tiempototal=tiempoTotal+tiempo;
 		}
 	}
 	cola.pop();
+	petEncoladas--;
 	finaliza.notify_one();
 	cola_espera.notify_all();
 
@@ -86,4 +95,39 @@ void Valla::fin(){
 	while(!cola.empty() && vallasLibres == 2){
 		finaliza.wait(lck);
 	}
+}
+
+void Subasta::sumarImagenes(){
+	unique_lock<mutex> lck(mut);
+	numIm++;
+}
+
+void Subasta::sumarTiemo(double t){
+	unique_lock<mutex> lck(mut);
+	tiempoTotal=tiempoTotal+t;
+}
+
+void Subasta::sumarPeticion(){
+	unique_lock<mutex> lck(mut);
+	petEncoladas++;
+}
+
+void Subasta::restarPeticion(){
+	unique_lock<mutex> lck(mut);
+	petEncoladas--;
+}
+
+
+
+void Subasta::informar(){
+	unique_lock<mutex> lck(mut);
+	cout << "INFORMACION HISTORICA DEL SISTEMA\n"
+		 << "#################################"
+		 << "Numero de imagenes mostradas: " << numIm << "\n"
+		 << "Tiempo total que las imagenes han estado en pantalla: " << tiempoTotal << "\n"
+		 << "Tiempo medio que las imagenes han estado en pantalla: " << tiempoTotal/numIm << "\n"
+		 << "INFORMACION DEL ESTADO DEL SISTEMA" << "\n"
+		 << "##################################"
+		 << "Numero de peticiones encoladas: " << petEncoladas << "\n"
+		 << "Tiempo contratado estimado: " << tiempoEstimado << endl;
 }

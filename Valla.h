@@ -45,6 +45,11 @@ private:
 
 	bool vallas[numVallas];
 
+	int numIm; //numero de imagenes mostradas 
+	double tiempoTotal; // tiempo total de imagenes mostrandose
+	int petEncoladas; // numero de peticiones encoladas
+	double tiempoEstimado // tiempo contratado estimado
+
 	/*
 	* Pre:	"url" contiene la URL donde está alojada la imagen a mostrar, "tiempo"
 	*		es el tiempo que se va a mostrar y "valla" es el numero de valla en
@@ -69,8 +74,41 @@ public:
 	*/
 	void atender(string url, int tiempo);
 
+	/*
+	* Pre:--
+	*
+	* Post: cola.empty() && vallasLibres == 0
+	*/
 	void fin();
-
+	
+	/*
+	* Pre: --
+	*
+	* Post: Se incrementa en 1 el numero de imagenes mostradas
+	*/
+	void sumarImagenes();
+	
+	/*
+	* Pre: "t" es un tiempo en segundos
+	*
+	* Post: Se incrementa en t el tiempo total que las imagenes han estado en pantalla
+	*/
+	void sumarTiempo();
+	
+	/*
+	* Pre: --
+	*
+	* Post: Se incrementa en 1 el numero de peticiones encoladas
+	*/
+	void sumarPeticion();
+	
+	/*
+	* Pre: --
+	*
+	* Post: Se decrementa en 1 el numero de peticiones encoladas
+	*/
+	void restarPeticion();
+	
 };
 
 #endif
