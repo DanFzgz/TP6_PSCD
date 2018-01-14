@@ -81,9 +81,9 @@ void Subasta::iniciarSubasta(){
 
 void Subasta::finalizarSubastas(){
 	unique_lock<mutex> lck(mut);
-	while(numNos!=numClientes-1||numMensajes==1){
+	/*while(numNos!=numClientes-1||numMensajes==1){
 		subasta.wait(lck);
-	}
+	}*/
 	enSubasta=false;
 	terminacion=true;
 	cout <<"Me voy a morir" <<endl;
