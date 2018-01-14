@@ -75,7 +75,7 @@ void subastador(){
 		else{
 			cout <<"Subasta finalizada con precio inferior al minimo" <<endl;
 			cout << "La proxima subasta comenzara en 5 segundos " << endl;
-		this_thread::sleep_for(chrono::seconds(5));
+			this_thread::sleep_for(chrono::seconds(5));
 			s.iniciarSubasta();
 		}
 
