@@ -1,4 +1,6 @@
 # Añadir con *.extension los tipos de archivo que no queremos que se suban al proyecto 
+*.DS_Store
+*.jpg
 
 # Prerequisites
 *.d
