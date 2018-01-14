@@ -18,7 +18,7 @@ Valla::Valla(){
 	tiempoEstimado=0;
 	for(int x = 0; x<numVallas; ++x){ vallas[x] = true; }
 	finish = false;
-	tiempo = 5;
+	tiempo = 30;
 }
 
 void Valla::mostrar1(string url){

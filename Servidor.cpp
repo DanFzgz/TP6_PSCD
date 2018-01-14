@@ -126,7 +126,7 @@ void servCliente(Socket& soc, int client_fd) {
 			s.mensaje();
 			cout <<"URL: " << url <<endl;
 		}
-		else if(s.ganador()==client_fd&&!meVoy){
+		else if(s.ganador()==client_fd && meVoy){
 			cout << "El cliente ganador ha abandonado la subasta" <<endl;
 			s.mensaje();
 		}
@@ -143,18 +143,14 @@ void servCliente(Socket& soc, int client_fd) {
 }
 
 void atender(){
-
 	string url;
 	while(!v.ended()){
-		/*while(cola_url.empty()){
-			cola.wait(lck);
-		}*/
-		if(v.libre1()){
+		if(v.libre1() && !cola_url.empty()){
 			url = cola_url.front();
 			cola_url.pop();
 			v.mostrar1(url);
 		}
-		else if(v.libre2()){
+		else if(v.libre2() && !cola_url.empty()){
 			url = cola_url.front();
 			cola_url.pop();
 			v.mostrar2(url);
