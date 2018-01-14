@@ -25,7 +25,7 @@ Valla v;
 ImageDownloader downloader;
 
 
-int tiempo = 60;
+int tiempo = 10;
 const int VALLA_WIDTH = 800;
 const int VALLA_HEIGHT = 800;
 
@@ -215,7 +215,7 @@ void atender(int id_valla){
 }
 //-------------------------------------------------------------
 int main(int argc,char *argv[]) {
-	const int N = 5;
+	const int N = 10;
 	// Dirección y número donde escucha el proceso servidor
 	string SERVER_ADDRESS = "localhost";
     int SERVER_PORT = atoi(argv[1]);
