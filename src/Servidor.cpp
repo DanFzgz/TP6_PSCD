@@ -7,14 +7,14 @@
 // Coms:	Servidor del TP6 de PSCD
 //*****************************************************************
 
-#include "Socket.hpp"
+#include "Socket/Socket.hpp"
 #include <iostream>
 #include <thread>
 #include <cstring> //manejo de cadenas tipo C
 #include <cstdlib>
 #include <chrono>
-#include "Subasta.hpp"
-#include "Valla.h"
+#include "Subasta/Subasta.hpp"
+#include "Valla/Valla.h"
 
 
 using namespace std;

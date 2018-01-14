@@ -5,7 +5,7 @@ if [ "$#" -ne 1 ]; then
   exit 1
 fi
 
-EXEC="./Servidor"
+EXEC="./bin/Servidor"
 PORT=$1;
 
  $EXEC $PORT

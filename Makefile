@@ -40,48 +40,48 @@ LDFLAGS=-L/usr/X11R6/lib -L/usr/local/lib -lm  -lcurl -lX11 # -pthread Flags lin
 
 all: ${CLIENTE} ${SERVER}
 
-${IMDOWNLOADER}.o: ${IMDOWNLOADER}.hpp ${IMDOWNLOADER}.cpp
-	${CC} -c ${CPPFLAGS} ${IMDOWNLOADER}.cpp
+bin/${IMDOWNLOADER}.o: src/Valla/${IMDOWNLOADER}.hpp src/Valla/${IMDOWNLOADER}.cpp
+	${CC} -o ./bin/${IMDOWNLOADER}.o -c ${CPPFLAGS} src/Valla/${IMDOWNLOADER}.cpp
 
 # SOCKETS
 # Compilacion libreria de Sockets
-${SOCKET}.o: ${SOCKET}.hpp ${SOCKET}.cpp
-	${CC} -c ${CPPFLAGS} ${SOCKET}.cpp
+bin/${SOCKET}.o: src/Socket/${SOCKET}.hpp src/Socket/${SOCKET}.cpp
+	${CC} -o ./bin/${SOCKET}.o -c ${CPPFLAGS} src/Socket/${SOCKET}.cpp
 
 # VALLA
 # Compilacion monitor VALLA
-${VALLA}.o: ${VALLA}.h ${VALLA}.cpp
-	${CC} -c ${CPPFLAGS} ${VALLA}.cpp
+bin/${VALLA}.o: src/Valla/${VALLA}.h src/Valla/${VALLA}.cpp
+	${CC} -o ./bin/${VALLA}.o -c ${CPPFLAGS} src/Valla/${VALLA}.cpp
 
 # VALLA
 # Compilacion monitor VALLA
-${SUBASTA}.o: ${SUBASTA}.hpp ${SUBASTA}.cpp
-	${CC} -c ${CPPFLAGS} ${SUBASTA}.cpp
+bin/${SUBASTA}.o: src/Subasta/${SUBASTA}.hpp src/Subasta/${SUBASTA}.cpp
+	${CC} -o ./bin/${SUBASTA}.o -c ${CPPFLAGS} src/Subasta/${SUBASTA}.cpp
 #-----------------------------------------------------------
 # CLIENTE
 # Compilacion
-${CLIENTE}.o: ${CLIENTE}.cpp
-	${CC} -c ${CPPFLAGS} ${CLIENTE}.cpp
+bin/${CLIENTE}.o: src/${CLIENTE}.cpp
+	${CC} -o ./bin/${CLIENTE}.o -c  ${CPPFLAGS} src/${CLIENTE}.cpp
 
 # Linkado
-${CLIENTE}: ${SOCKET}.o ${CLIENTE}.o
-	${CC} ${LDFLAGS} ${SOCKET}.o ${CLIENTE}.o -o ${CLIENTE} ${SOCKETSFLAGS}
+${CLIENTE}: bin/${SOCKET}.o bin/${CLIENTE}.o
+	${CC} ${LDFLAGS} bin/${SOCKET}.o bin/${CLIENTE}.o -o bin/${CLIENTE} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 # MULTISERVIDOR
 # Compilacion
-${SERVER}.o: ${SERVER}.cpp
-	${CC} -c ${CPPFLAGS} ${SERVER}.cpp
+bin/${SERVER}.o: src/${SERVER}.cpp
+	${CC} -o ./bin/${SERVER}.o -c ${CPPFLAGS} src/${SERVER}.cpp
 
 # Linkado
-${SERVER}: ${SOCKET}.o ${VALLA}.o ${SUBASTA}.o ${IMDOWNLOADER}.o ${SERVER}.o
-	${CC} ${LDFLAGS} ${SOCKET}.o ${VALLA}.o ${SUBASTA}.o ${IMDOWNLOADER}.o ${SERVER}.o -o ${SERVER} ${SOCKETSFLAGS}
+${SERVER}: bin/${SOCKET}.o bin/${VALLA}.o bin/${SUBASTA}.o bin/${IMDOWNLOADER}.o bin/${SERVER}.o
+	${CC} ${LDFLAGS} bin/${SOCKET}.o bin/${VALLA}.o bin/${SUBASTA}.o bin/${IMDOWNLOADER}.o bin/${SERVER}.o -o bin/${SERVER} ${SOCKETSFLAGS}
 #-----------------------------------------------------------
 
 # LIMPIEZA
 clean:
-	$(RM) ${SOCKET}.o
-	$(RM) ${CLIENTE} ${CLIENTE}.o
-	$(RM) ${SERVER} ${SERVER}.o
-	$(RM) ${VALLA} ${VALLA}.o
-	$(RM) ${SUBASTA} ${SUBASTA}.o
-	$(RM) ${IMDOWNLOADER} ${IMDOWNLOADER}.o
+	$(RM) bin/${SOCKET}.o
+	$(RM) bin/${CLIENTE} bin/${CLIENTE}.o
+	$(RM) bin/${SERVER} bin/${SERVER}.o
+	$(RM) bin/${VALLA}.o
+	$(RM) bin/${SUBASTA}.o
+	$(RM) bin/${IMDOWNLOADER}.o
