@@ -22,6 +22,10 @@ int main(int argc,char *argv[]) {
     // Dirección y número donde escucha el proceso servidor
     string SERVER_ADDRESS = "localhost";
     int SERVER_PORT = atoi(argv[1]);
+	char url[500];
+	if(argc==3){
+		url=argv[2];
+	}
 
 	// Creación del socket con el que se llevará a cabo
 	// la comunicación con el servidor.
@@ -61,9 +65,14 @@ int main(int argc,char *argv[]) {
 			terminar=true;
 		}
 		else if(buffer.compare("URL que desearia mostrar: ")==0){
-			cout << buffer ;
-			cin >> mensaje;
-			socket.Send(socket_fd,mensaje);
+			if(argc==3){
+				socket.Send(socket_fd,url);
+			}
+			else{
+				cout << buffer ;
+				cin >> mensaje;
+				socket.Send(socket_fd,mensaje);
+			}
 		}
 		else if(buffer.compare("Ha ganado la subasta")==0){
 			cout << buffer <<endl;
@@ -74,7 +83,7 @@ int main(int argc,char *argv[]) {
 		else{
 			cout << buffer <<"(y/n) : ";
 			cin >> mensaje;
-			while(mensaje.compare("n")!= 0 || mensaje.compare("y") != 0){
+			while(mensaje.compare("n")!= 0 || mensaje.compare("y") != 0|| mensaje.size()==0){
 				cout << "Comando no reconocido" << endl;
 				cout << buffer <<"(y/n) : ";
 				cin >> mensaje;
