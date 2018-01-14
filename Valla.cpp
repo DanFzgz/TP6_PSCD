@@ -18,7 +18,7 @@ Valla::Valla(){
 	tiempoEstimado=0;
 	for(int x = 0; x<numVallas; ++x){ vallas[x] = true; }
 	finish = false;
-	tiempo = 30;
+	tiempo = 60;
 }
 
 void Valla::mostrar1(string url){
@@ -79,6 +79,23 @@ void Valla::mostrar2(string url){
 
     cv.notify_all();
 
+}
+
+void Valla::mostrar(queue<string>& cola){
+
+	unique_lock<mutex> lck(mtx);
+
+
+	if(vallas[0] && !cola.empty()){
+		string url = cola.front();
+		cola.pop();
+		mostrar1(url);
+	}
+	else if(vallas[1] && !cola.empty()){
+		string url = cola.front();
+		cola.pop();
+		mostrar2(url);
+	}
 }
 
 void Valla::fin(){

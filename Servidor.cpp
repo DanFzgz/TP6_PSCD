@@ -145,16 +145,7 @@ void servCliente(Socket& soc, int client_fd) {
 void atender(){
 	string url;
 	while(!v.ended()){
-		if(v.libre1() && !cola_url.empty()){
-			url = cola_url.front();
-			cola_url.pop();
-			v.mostrar1(url);
-		}
-		else if(v.libre2() && !cola_url.empty()){
-			url = cola_url.front();
-			cola_url.pop();
-			v.mostrar2(url);
-		}
+		v.mostrar(cola_url);
 	}
 }
 //-------------------------------------------------------------

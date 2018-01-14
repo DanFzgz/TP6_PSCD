@@ -55,6 +55,8 @@ public:
 
     void mostrar2(string url);
 
+	void mostrar(queue<string>& cola);
+
     void fin();
 
     void terminar();
