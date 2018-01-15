@@ -25,7 +25,7 @@ Valla v;
 ImageDownloader downloader;
 
 
-int tiempo = 10;
+int tiempo = 60;
 const int VALLA_WIDTH = 800;
 const int VALLA_HEIGHT = 800;
 
