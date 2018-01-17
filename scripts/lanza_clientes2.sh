@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-EXEC="./bin/Cliente"
+EXEC="./../bin/Cliente"
 IP=$1
 PORT=$2
 URL=$3
